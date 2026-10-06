@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>KUIS MUSIK KELAS 7 - MOBILE LEGENDS EDITION</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; -webkit-user-select: none; }
+    body { background: #0f0c1b; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; padding: 10px; overflow-x: hidden; }
+    
+    /* Anti-Cheat Overlay */
+    .cheat-warning { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(230, 57, 70, 0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+    .cheat-warning h1 { font-size: 28px; color: #fff; margin-bottom: 15px; text-transform: uppercase; }
+    .cheat-warning p { font-size: 16px; color: #f8f9fa; margin-bottom: 20px; line-height: 1.5; }
+    .cheat-warning button { background: #fff; color: #e63946; font-size: 18px; font-weight: bold; padding: 12px 30px; border: none; border-radius: 25px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+    /* Header Game Style */
+    .header { background: #1a162b; border-radius: 16px; padding: 12px 15px; border: 3px solid #ff007f; box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); margin-bottom: 15px; }
+    .top-info { display: flex; justify-content: space-between; align-items: center; }
+    .student-info { font-size: 16px; color: #00f0ff; margin-bottom: 6px; font-weight: bold; text-shadow: 0 0 5px #00f0ff; }
+    .q-counter { font-size: 16px; font-weight: bold; color: #ffe600; }
+    .score-badge { background: linear-gradient(135deg, #00f0ff, #ff007f); padding: 8px 18px; border-radius: 20px; font-size: 18px; font-weight: 900; color: #fff; text-shadow: 1px 1px 2px #000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+
+    /* Layout Ubin 3D Game */
+    .tiles-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)); gap: 12px; padding: 15px; background: #151221; border: 3px solid #7928ca; border-radius: 20px; flex-grow: 1; max-height: calc(100vh - 180px); overflow-y: auto; box-shadow: inset 0 0 20px rgba(0,0,0,0.8); }
+    
+    .tile-btn { 
+      background: linear-gradient(180deg, #2d264a, #1a162b); 
+      border: 2px solid #00f0ff; 
+      border-bottom: 6px solid #00a8b3; 
+      border-radius: 12px; 
+      color: #fff; 
+      font-size: 18px; 
+      font-weight: 900; 
+      height: 60px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      cursor: pointer; 
+      transition: all 0.1s ease; 
+      box-shadow: 0 6px 0 #008088, 0 10px 10px rgba(0,0,0,0.5); 
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    }
+    .tile-btn:active { 
+      transform: translateY(4px); 
+      border-bottom-width: 2px; 
+      box-shadow: 0 2px 0 #008088, 0 4px 5px rgba(0,0,0,0.5); 
+    }
+    .tile-btn.correct { 
+      background: linear-gradient(180deg, #10b981, #059669) !important; 
+      border-color: #34d399 !important; 
+      border-bottom: 6px solid #047857 !important; 
+      box-shadow: 0 6px 0 #064e3b, 0 0 12px rgba(16, 185, 129, 0.6) !important; 
+      cursor: not-allowed; 
+    }
+    .tile-btn.wrong { 
+      background: linear-gradient(180deg, #ef4444, #dc2626) !important; 
+      border-color: #f87171 !important; 
+      border-bottom: 6px solid #b91c1c !important; 
+      box-shadow: 0 6px 0 #7f1d1d, 0 0 12px rgba(239, 68, 68, 0.6) !important; 
+      cursor: not-allowed; 
+    }
+
+    /* Finish Action Button */
+    .finish-bar { margin-top: 15px; text-align: center; }
+    .finish-btn { 
+      background: linear-gradient(135deg, #ffe600, #ff007f); 
+      color: #fff; 
+      font-size: 20px; 
+      font-weight: 900; 
+      padding: 14px 30px; 
+      border: 2px solid #fff; 
+      border-bottom: 6px solid #b30059; 
+      border-radius: 30px; 
+      cursor: pointer; 
+      width: 100%; 
+      max-width: 400px; 
+      text-transform: uppercase; 
+      letter-spacing: 1px; 
+      box-shadow: 0 6px 0 #800040, 0 0 15px rgba(255, 0, 127, 0.5); 
+      display: none; 
+    }
+    .finish-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #800040; }
+
+    /* Modal Dialog Soal */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 9000; justify-content: center; align-items: center; padding: 15px; backdrop-filter: blur(5px); }
+    .modal-card { background: #1a162b; border: 3px solid #00f0ff; border-radius: 20px; padding: 20px; width: 100%; max-width: 500px; box-shadow: 0 0 25px rgba(0, 240, 255, 0.3); display: flex; flex-direction: column; position: relative; max-height: 90vh; overflow-y: auto; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .modal-title { font-size: 18px; font-weight: 900; color: #00f0ff; text-transform: uppercase; letter-spacing: 1px; }
+    .close-modal-btn { background: #ef4444; color: #fff; border: none; font-weight: bold; padding: 6px 12px; border-radius: 8px; cursor: pointer; box-shadow: 0 3px 0 #991b1b; }
+
+    /* Timer UI Dalam Modal */
+    .timer-container { width: 100%; background: #0f0c1b; border-radius: 10px; height: 18px; border: 2px solid #7928ca; overflow: hidden; position: relative; margin-bottom: 15px; }
+    .timer-bar { height: 100%; width: 100%; background: linear-gradient(90deg, #00f0ff, #ff007f); transition: width 1s linear; }
+    .timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 12px; font-weight: 900; color: #fff; text-shadow: 1px 1px 2px #000; }
+
+    /* Pertanyaan & Opsi Jawaban 3D */
+    .question-box { background: #0f0c1b; border: 2px solid #ffe600; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: bold; line-height: 1.4; text-align: center; min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ffe600; margin-bottom: 15px; box-shadow: inset 0 0 10px rgba(255, 230, 0, 0.2); }
+    .audio-btn { background: linear-gradient(135deg, #ff007f, #7928ca); color: #fff; border: 2px solid #fff; border-bottom: 4px solid #4a1580; padding: 10px 20px; font-size: 15px; font-weight: bold; border-radius: 20px; cursor: pointer; margin-top: 12px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+    .audio-btn:active { transform: translateY(2px); }
+
+    .options-grid { display: flex; flex-direction: column; gap: 12px; }
+    .opt-btn { 
+      background: linear-gradient(180deg, #2d264a, #1a162b); 
+      border: 2px solid #7928ca; 
+      border-bottom: 5px solid #4a1580; 
+      color: #fff; 
+      padding: 12px 15px; 
+      border-radius: 12px; 
+      font-size: 15px; 
+      font-weight: bold; 
+      text-align: center; 
+      cursor: pointer; 
+      transition: all 0.1s ease; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
+    }
+    .opt-btn:active { transform: translateY(3px); border-bottom-width: 2px; }
+    .opt-btn.correct { background: linear-gradient(180deg, #10b981, #059669) !important; border-color: #34d399 !important; border-bottom: 5px solid #047857 !important; color: #fff !important; }
+    .opt-btn.wrong { background: linear-gradient(180deg, #ef4444, #dc2626) !important; border-color: #f87171 !important; border-bottom: 5px solid #b91c1c !important; color: #fff !important; }
+
+    /* MODAL ANIMASI HERO PENYEMANGAT MLBB */
+    .hero-modal-overlay { 
+      display: none; 
+      position: fixed; 
+      top: 0; left: 0; 
+      width: 100%; height: 100%; 
+      background: rgba(0, 0, 0, 0.85); 
+      z-index: 9990; 
+      justify-content: center; 
+      align-items: center; 
+      padding: 20px; 
+    }
+    .hero-card { 
+      background: #1a162b; 
+      border-radius: 20px; 
+      padding: 25px 20px; 
+      width: 100%; 
+      max-width: 380px; 
+      text-align: center; 
+      position: relative; 
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+      animation: heroPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes heroPop {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .hero-card.correct-style { border: 4px solid #10b981; box-shadow: 0 0 30px rgba(16, 185, 129, 0.6); }
+    .hero-card.wrong-style { border: 4px solid #ef4444; box-shadow: 0 0 30px rgba(239, 68, 68, 0.6); }
+    
+    .hero-avatar { 
+      width: 110px; 
+      height: 110px; 
+      border-radius: 50%; 
+      margin: 0 auto 15px auto; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      font-size: 55px; 
+      background: #0f0c1b;
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+    .correct-style .hero-avatar { border: 4px solid #10b981; box-shadow: 0 0 20px #10b981; }
+    .wrong-style .hero-avatar { border: 4px solid #ef4444; box-shadow: 0 0 20px #ef4444; }
+
+    .hero-title { font-size: 22px; font-weight: 900; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .correct-style .hero-title { color: #34d399; text-shadow: 0 0 10px #10b981; }
+    .wrong-style .hero-title { color: #f87171; text-shadow: 0 0 10px #ef4444; }
+
+    .hero-quote { font-size: 15px; color: #ffe600; font-weight: bold; line-height: 1.4; margin-bottom: 18px; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 10px; }
+    .hero-next-btn { 
+      background: linear-gradient(135deg, #00f0ff, #7928ca); 
+      color: #fff; 
+      border: 2px solid #fff; 
+      padding: 10px 25px; 
+      border-radius: 20px; 
+      font-size: 16px; 
+      font-weight: 900; 
+      cursor: pointer; 
+      text-transform: uppercase; 
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
+    }
+
+    /* Start Screen Overlay */
+    .start-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #2d264a 0%, #0f0c1b 100%); z-index: 9998; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; overflow-y: auto; }
+    .start-title { color: #00f0ff; font-size: 32px; font-weight: 900; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 15px #00f0ff, 0 0 30px #00f0ff; }
+    .start-subtitle { color: #ff007f; font-size: 18px; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 10px #ff007f; }
+    
+    /* Input Form Siswa */
+    .student-form { background: #1a162b; border: 3px solid #ff007f; padding: 20px; border-radius: 16px; width: 100%; max-width: 360px; margin-bottom: 20px; text-align: left; box-shadow: 0 0 20px rgba(255, 0, 127, 0.3); }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 13px; color: #ffe600; font-weight: bold; margin-bottom: 6px; text-transform: uppercase; }
+    .form-group input { width: 100%; padding: 12px; font-size: 15px; border-radius: 10px; border: 2px solid #7928ca; background: #0f0c1b; color: #fff; outline: none; user-select: text; -webkit-user-select: text; }
+    .form-group input:focus { border-color: #00f0ff; box-shadow: 0 0 10px rgba(0, 240, 255, 0.5); }
+
+    .rule-box { background: #1a162b; border: 2px solid #7928ca; padding: 15px; border-radius: 12px; text-align: left; font-size: 12px; margin-bottom: 20px; width: 100%; max-width: 360px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+    .rule-box li { margin-bottom: 6px; color: #e2e8f0; }
+    
+    .start-btn { 
+      background: linear-gradient(135deg, #00f0ff, #7928ca); 
+      color: #fff; 
+      font-size: 22px; 
+      font-weight: 900; 
+      padding: 16px 40px; 
+      border: 2px solid #fff; 
+      border-bottom: 6px solid #008088; 
+      border-radius: 40px; 
+      cursor: pointer; 
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.6); 
+      width: 100%; 
+      max-width: 360px; 
+      text-transform: uppercase; 
+      letter-spacing: 2px; 
+      transition: all 0.1s ease;
+    }
+    .start-btn:active { transform: translateY(4px); box-shadow: 0 0 10px rgba(0, 240, 255, 0.6); }
+  </style>
+</head>
+<body>
+
+  <!-- Screen Peringatan Anti Curang -->
+  <div class="cheat-warning" id="cheat-screen">
+    <h1 id="cheat-title">PERINGATAN CURANG!</h1>
+    <p id="cheat-msg">Terdeteksi meninggalkan aplikasi / membuka tab lain!</p>
+    <button onclick="resumeQuiz()">LANJUTKAN KUIS</button>
+  </div>
+
+  <!-- Screen Awal / Start Game Trending -->
+  <div class="start-screen" id="start-screen">
+    <div class="start-title">ZULKARNAEN</div>
+    <div class="start-subtitle">🎮 KUIS MUSIK SMP 🎮</div>
+    
+    <div class="student-form">
+      <div class="form-group">
+        <label for="student-name">Nama Lengkap Murid:</label>
+        <input type="text" id="student-name" placeholder="Masukkan nama lengkap..." autocomplete="off">
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label for="student-class">Kelas:</label>
+        <input type="text" id="student-class" placeholder="Contoh: 7A / 7.1" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="rule-box">
+      <strong style="color:#ffe600; display:block; margin-bottom:6px; text-transform:uppercase;">ATURAN PERMAINAN:</strong>
+      <ul>
+        <li>🎲 <strong>Ubin 3D:</strong> Bebas memilih ubin mana saja untuk dijawab terlebih dahulu.</li>
+        <li>💯 <strong>Sistem Skor:</strong> Tiap soal bernilai 2 poin (Total 50 Soal = 100 Poin).</li>
+        <li>⏱️ <strong>Waktu Soal:</strong> 1 Menit (60 Detik) per soal yang dibuka.</li>
+        <li>🔊 <strong>Soal Bersuara:</strong> Tekan tombol speaker untuk mendengarkan audio nada/ritme.</li>
+        <li>🚫 <strong>Anti-Curang:</strong> Dilarang pindah tab/aplikasi saat bermain.</li>
+        <li>📊 <strong>Rekap Otomatis:</strong> Hasil kuis langsung terkirim ke Google Sheets guru.</li>
+      </ul>
+    </div>
+    <button class="start-btn" onclick="validateAndStart()">START GAME 🚀</button>
+  </div>
+
+  <!-- Header Section -->
+  <div class="header">
+    <div class="student-info" id="display-student-info">Siswa: - | Kelas: -</div>
+    <div class="top-info">
+      <div class="q-counter" id="q-counter">Terjawab: 0 / 50 Soal</div>
+      <div class="score-badge" id="score-badge">SKOR: 0</div>
+    </div>
+  </div>
+
+  <!-- Grid Ubin Soal 3D -->
+  <div class="tiles-container" id="tiles-container"></div>
+
+  <!-- Tombol Selesai Kuis -->
+  <div class="finish-bar">
+    <button class="finish-btn" id="finish-btn" onclick="finishQuiz()">KIRIM & LIHAT HASIL 🏆</button>
+  </div>
+
+  <!-- Modal Dialog Pertanyaan -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">Pertanyaan Soal</div>
+        <button class="close-modal-btn" onclick="closeModalDirectly()">✕ Batal</button>
+      </div>
+
+      <div class="timer-container">
+        <div class="timer-bar" id="timer-bar"></div>
+        <div class="timer-text" id="timer-text">01:00</div>
+      </div>
+
+      <div class="question-box" id="question-box">
+        <span id="question-text">Memuat soal...</span>
+        <button id="audio-play-btn" class="audio-btn" style="display:none;" onclick="playQuestionSound()">
+          🔊 Putar Suara Nada / Ritme
+        </button>
+      </div>
+
+      <div class="options-grid" id="options-grid"></div>
+    </div>
+  </div>
+
+  <!-- MODAL ANIMASI HERO PENYEMANGAT MLBB -->
+  <div class="hero-modal-overlay" id="hero-modal">
+    <div class="hero-card" id="hero-card">
+      <div class="hero-avatar" id="hero-icon">⚔️</div>
+      <div class="hero-title" id="hero-name">HERO NAME</div>
+      <div class="hero-quote" id="hero-quote">"Kata-kata penyemangat hero..."</div>
+      <button class="hero-next-btn" onclick="closeHeroModal()">LANJUTKAN 🚀</button>
+    </div>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLlFjDUN03qJ4oRzW4RXMetplgcasO4AW-6HZv6OduRg8IRqiDYihlj37hYBK-HZJm/exec";
+
+    let audioCtx = null;
+    let consecutiveCorrect = 0;
+
+    // DATA HERO PENYEMANGAT MLBB DENGAN SUARA INDONESIA
+    const correctHeroes = [
+      { name: "ALUCARD", icon: "⚔️", quote: "Hebat! Tetap hati-hati dan pertahankan fokusmu, kemenangan semakin dekat!" },
+      { name: "MIYA", icon: "🏹", quote: "Tembakan yang tepat! Tetap tenang, jangan terburu-buru membaca soal berikutnya!" },
+      { name: "GUSION", icon: "🗡", quote: "Langkah yang cepat dan tepat! Tetap teliti agar tidak salah di soal selanjutnya!" },
+      { name: "CHOU", icon: "🥊", quote: "Pukulan yang mantap! Jaga konsentrasimu, teruskan perjuanganmu!" },
+      { name: "LANCELOT", icon: "🤺", quote: "Sangat anggun! Berhati-hatilah, selangkah lagi menuju kemenangan!" }
+    ];
+
+    const wrongHeroes = [
+      { name: "TIGREAL", icon: "🛡️", quote: "Jangan menyerah! Awal kegagalan adalah fondasi pertahanan yang lebih kuat. Ayo bangkit!" },
+      { name: "LAYLA", icon: "🔫", quote: "Tidak apa-apa! Tetap semangat, pelajari lagi dan bidik jawaban berikutnya dengan teliti!" },
+      { name: "ZILONG", icon: "🔱", quote: "Pantang mundur! Pahlawan sejati tidak pernah patah semangat karena satu kesalahan!" },
+      { name: "BALMOND", icon: "🪓", quote: "Jangan sedih! Ayunkan lagi semangatmu dan fokus di soal berikutnya!" },
+      { name: "NANA", icon: "🐱", quote: "Jangan patah semangat ya! Nana yakin kamu pasti bisa menjawab benar di soal berikutnya!" }
+    ];
+
+    function initAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function speakText(text, lang = 'id-ID') {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = lang;
+        utterance.pitch = 1.0;
+        utterance.rate = 1.0;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    function playMLSound(type) {
+      if (type === 'opening') {
+        speakText("Welcome to Zulkarnaen Quiz Music SMP!", "en-US");
+      } else if (type === 'correct') {
+        consecutiveCorrect++;
+        if (consecutiveCorrect === 1) {
+          speakText("First Blood!", "en-US");
+        } else if (consecutiveCorrect === 2) {
+          speakText("Double Kill!", "en-US");
+        } else if (consecutiveCorrect === 3) {
+          speakText("Triple Kill!", "en-US");
+        } else if (consecutiveCorrect === 4) {
+          speakText("Maniac!", "en-US");
+        } else if (consecutiveCorrect >= 5) {
+          speakText("Savage! Legendary!", "en-US");
+        }
+      } else if (type === 'wrong') {
+        consecutiveCorrect = 0;
+        const wrongVoices = [
+          "You have been slain!",
+          "Unstoppable enemy!",
+          "Wipe out!"
+        ];
+        const randomWrong = wrongVoices[Math.floor(Math.random() * wrongVoices.length)];
+        speakText(randomWrong, "en-US");
+      }
+    }
+
+    function showHeroBoost(isCorrect) {
+      const heroModal = document.getElementById("hero-modal");
+      const heroCard = document.getElementById("hero-card");
+      const heroIcon = document.getElementById("hero-icon");
+      const heroName = document.getElementById("hero-name");
+      const heroQuote = document.getElementById("hero-quote");
+
+      let hero;
+      if (isCorrect) {
+        hero = correctHeroes[Math.floor(Math.random() * correctHeroes.length)];
+        heroCard.className = "hero-card correct-style";
+      } else {
+        hero = wrongHeroes[Math.floor(Math.random() * wrongHeroes.length)];
+        heroCard.className = "hero-card wrong-style";
+      }
+
+      heroIcon.innerText = hero.icon;
+      heroName.innerText = hero.name;
+      heroQuote.innerText = `"${hero.quote}"`;
+
+      heroModal.style.display = "flex";
+
+      // Memutar suara pembacaan kalimat penyemangat Hero
+      setTimeout(function() {
+        speakText(hero.quote, 'id-ID');
+      }, 300);
+    }
+
+    function closeHeroModal() {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      document.getElementById("hero-modal").style.display = "none";
+      document.getElementById("modal-overlay").style.display = "none";
+      currentQIndex = -1;
+    }
+
+    function playSFX(type) {
+      initAudioContext();
+      if (!audioCtx) return;
+
+      const now = audioCtx.currentTime;
+
+      if (type === 'correct') {
+        playMLSound('correct');
+        const osc1 = audioCtx.createOscillator();
+        const osc2 = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc1.type = 'sine';
+        osc2.type = 'triangle';
+
+        osc1.frequency.setValueAtTime(587.33, now); 
+        osc1.frequency.setValueAtTime(880, now + 0.1); 
+
+        osc2.frequency.setValueAtTime(1174.66, now + 0.1);
+
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + 0.35);
+        osc2.stop(now + 0.35);
+      } else if (type === 'wrong') {
+        playMLSound('wrong');
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.setValueAtTime(100, now + 0.15);
+
+        gain.gain.setValueAtTime(0.4, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.4);
+      }
+    }
+
+    function playAudioPattern(audioData) {
+      initAudioContext();
+      if (!audioCtx) return;
+
+      const bpm = 60; 
+      const beatSec = 60 / bpm;
+      const now = audioCtx.currentTime + 0.05;
+
+      if (audioData.type === 'solfeggio_quiz') {
+        const scaleFreqs = [261.63, 293.66, 329.63, 349.23, 392.00]; 
+        let offset = 0;
+        
+        scaleFreqs.forEach(freq => {
+          playTone(0.4, now + offset, 'sine', freq);
+          offset += 0.5;
+        });
+
+        offset += 0.6;
+        playTone(1.5, now + offset, 'sine', audioData.targetFreq);
+
+      } else if (audioData.type === 'single') {
+        playTone(audioData.duration * beatSec, now, audioData.instrument || 'sine', audioData.freq || 523.25);
+      } else if (audioData.type === 'pattern') {
+        let currentOffset = 0;
+        audioData.notes.forEach(note => {
+          if (note.dur > 0) {
+            playTone(note.dur * beatSec, now + currentOffset, note.inst || 'sine', note.freq || 523.25);
+          }
+          currentOffset += note.step * beatSec;
+        });
+      } else if (audioData.type === 'inst') {
+        playInstrumentSound(audioData.instrument, now);
+      }
+    }
+
+    function playTone(dur, startTime, inst = 'sine', freq = 523.25) {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      if (inst === 'violin') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(freq, startTime);
+        gain.gain.setValueAtTime(0.01, startTime);
+        gain.gain.linearRampToValueAtTime(0.3, startTime + 0.1);
+        gain.gain.setValueAtTime(0.3, startTime + Math.max(0.1, dur - 0.1));
+        gain.gain.linearRampToValueAtTime(0.001, startTime + dur);
+      } else if (inst === 'guitar') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, startTime);
+        gain.gain.setValueAtTime(0.4, startTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + dur);
+      } else {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, startTime);
+        gain.gain.setValueAtTime(0.3, startTime);
+        gain.gain.linearRampToValueAtTime(0.001, startTime + dur);
+      }
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(startTime);
+      osc.stop(startTime + dur);
+    }
+
+    function playInstrumentSound(inst, startTime) {
+      if (!audioCtx) return;
+      if (inst === 'drum') {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.frequency.setValueAtTime(150, startTime);
+        osc.frequency.exponentialRampToValueAtTime(0.01, startTime + 0.25);
+        gain.gain.setValueAtTime(0.8, startTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.25);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(startTime);
+        osc.stop(startTime + 0.25);
+      } else if (inst === 'guitar') {
+        playTone(1.5, startTime, 'guitar', 329.63);
+      } else if (inst === 'violin') {
+        playTone(2.0, startTime, 'violin', 440);
+      }
+    }
+
+    // BANK SOAL AUDIO
+    var audioQuestionsPool = [
+      { q: "Dengarkan suara bunyi berikut! Berapa jumlah ketukan nilai durasi bunyi tunggal yang baru saja kamu dengar?", options: ["1 Ketukan", "2 Ketukan", "3 Ketukan", "4 Ketukan"], correctText: "1 Ketukan", audio: { type: "single", duration: 1.0 } },
+      { q: "Dengarkan suara bunyi berikut! Berapa jumlah ketukan nilai durasi bunyi tunggal tersebut?", options: ["1 Ketukan", "2 Ketukan", "3 Ketukan", "4 Ketukan"], correctText: "2 Ketukan", audio: { type: "single", duration: 2.0 } },
+      { q: "Dengarkan kombinasi pola bunyi dalam 1 birama 4/4 berikut! Pola ketukan bunyi yang terdengar adalah...", options: ["1 ketukan - 1 ketukan - 2 ketukan", "2 ketukan - 2 ketukan", "1 ketukan - 3 ketukan", "4 ketukan penuh"], correctText: "1 ketukan - 1 ketukan - 2 ketukan", audio: { type: "pattern", notes: [{dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 2, step: 2}] } },
+      { q: "Dengarkan kombinasi pola bunyi berikut! Nilai gabungan bunyi yang kamu dengar dalam 1 birama adalah...", options: ["2 ketukan - 1 ketukan - 1 ketukan", "1 ketukan - 1 ketukan - 1 ketukan - 1 ketukan", "3 ketukan - 1 ketukan", "2 ketukan - 2 ketukan"], correctText: "2 ketukan - 1 ketukan - 1 ketukan", audio: { type: "pattern", notes: [{dur: 2, step: 2}, {dur: 1, step: 1}, {dur: 1, step: 1}] } },
+      { q: "Dengarkan pola ritme berikut! Pola gabungan bunyi yang baru saja dimainkan adalah...", options: ["1 ketukan - 2 ketukan - 1 ketukan", "1 ketukan - 1 ketukan - 2 ketukan", "2 ketukan - 2 ketukan", "3 ketukan - 1 ketukan"], correctText: "1 ketukan - 2 ketukan - 1 ketukan", audio: { type: "pattern", notes: [{dur: 1, step: 1}, {dur: 2, step: 2}, {dur: 1, step: 1}] } },
+      { q: "Dengarkan gabungan pola bunyi berikut! Struktur ritme dalam 1 birama tersebut adalah...", options: ["3 ketukan - 1 ketukan", "1 ketukan - 3 ketukan", "2 ketukan - 2 ketukan", "1 ketukan - 1 ketukan - 2 ketukan"], correctText: "3 ketukan - 1 ketukan", audio: { type: "pattern", notes: [{dur: 3, step: 3}, {dur: 1, step: 1}] } },
+      { q: "Dengarkan kombinasi ritme 1 birama 4/4 berikut! Pola bunyi yang dimainkan adalah...", options: ["4 bunyi masing-masing 1 ketukan", "2 bunyi masing-masing 2 ketukan", "1 bunyi bernilai 4 ketukan", "1 bunyi bernilai 3 ketukan & diam 1 ketukan"], correctText: "4 bunyi masing-masing 1 ketukan", audio: { type: "pattern", notes: [{dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 1, step: 1}] } },
+      { q: "Dengarkan alur bunyi dalam 2 birama 4/4 berikut! Gabungan durasi bunyi antar birama tersebut adalah...", options: ["Birama 1: (2+2 ketukan), Birama 2: (4 ketukan)", "Birama 1: (1+1+1+1 ketukan), Birama 2: (2+2 ketukan)", "Birama 1: (3+1 ketukan), Birama 2: (2+2 ketukan)", "Birama 1: (4 ketukan), Birama 2: (1+1+2 ketukan)"], correctText: "Birama 1: (2+2 ketukan), Birama 2: (4 ketukan)", audio: { type: "pattern", notes: [{dur: 2, step: 2}, {dur: 2, step: 2}, {dur: 4, step: 4}] } },
+      { q: "Dengarkan ritme dua birama berikut! Urutan gabungan bunyinya adalah...", options: ["Birama 1: (1+1+2 ketukan), Birama 2: (2+2 ketukan)", "Birama 1: (2+2 ketukan), Birama 2: (1+1+1+1 ketukan)", "Birama 1: (4 ketukan), Birama 2: (4 ketukan)", "Birama 1: (1+3 ketukan), Birama 2: (2+2 ketukan)"], correctText: "Birama 1: (1+1+2 ketukan), Birama 2: (2+2 ketukan)", audio: { type: "pattern", notes: [{dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 2, step: 2}, {dur: 2, step: 2}, {dur: 2, step: 2}] } },
+      { q: "Dengarkan 2 birama audio berikut! Bunyi yang dimainkan secara berurutan adalah...", options: ["Birama 1: 4 ketukan penuh | Birama 2: 4 ketukan penuh", "Birama 1: 2 ketukan | Birama 2: 2 ketukan", "Birama 1: 1 ketukan | Birama 2: 3 ketukan", "Birama 1: 3 ketukan | Birama 2: 1 ketukan"], correctText: "Birama 1: 4 ketukan penuh | Birama 2: 4 ketukan penuh", audio: { type: "pattern", notes: [{dur: 4, step: 4}, {dur: 4, step: 4}] } },
+      { q: "Dengarkan ritme gabungan dua birama ini! Struktur ketukan bunyinya adalah...", options: ["Birama 1: (1+1+1+1 ketukan), Birama 2: (1+1+2 ketukan)", "Birama 1: (2+2 ketukan), Birama 2: (3+1 ketukan)", "Birama 1: (4 ketukan), Birama 2: (2+2 ketukan)", "Birama 1: (1+3 ketukan), Birama 2: (1+1+1+1 ketukan)"], correctText: "Birama 1: (1+1+1+1 ketukan), Birama 2: (1+1+2 ketukan)", audio: { type: "pattern", notes: [{dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 2, step: 2}] } },
+      { q: "Dengarkan warna suara (timbre) audio berikut! Suara instrumen musik yang dimainkan adalah...", options: ["Gitar", "Biola", "Drum / Perkusi", "Angklung"], correctText: "Biola", audio: { type: "inst", instrument: "violin" } },
+      { q: "Dengarkan warna suara instrumen berikut! Karakteristik bunyi tersebut milik instrumen...", options: ["Gitar", "Biola", "Drum / Perkusi", "Terompet"], correctText: "Gitar", audio: { type: "inst", instrument: "guitar" } },
+      { q: "Dengarkan suara hentakan audio berikut! Alat musik ritmis yang menghasilkan bunyi tersebut adalah...", options: ["Drum / Kick Bass", "Biola", "Gitar Akustik", "Piano"], correctText: "Drum / Kick Bass", audio: { type: "inst", instrument: "drum" } },
+      { q: "Dengarkan sampel instrumen musik gesek berikut! Alat musik apakah ini?", options: ["Biola", "Gitar", "Drumset", "Angklung"], correctText: "Biola", audio: { type: "inst", instrument: "violin" } },
+      { q: "Dengarkan suara petikan alat musik berikut! Instrumen melodis/harmonis yang dimaksud adalah...", options: ["Gitar", "Biola", "Drum", "Seruling"], correctText: "Gitar", audio: { type: "inst", instrument: "guitar" } },
+      { q: "Dengarkan pola bunyi gesekan panjang berikut! Alat musik gesek yang mampu menghasilkan durasi nada panjang ini adalah...", options: ["Biola", "Drum", "Gitar", "Kendang"], correctText: "Biola", audio: { type: "inst", instrument: "violin" } },
+      { q: "Dengarkan denyut ritmis berikut! Peran instrumen ritmis yang mendominasi seperti audio ini meilki...", options: ["Drum / Perkusi", "Gitar Akustik", "Biola", "Penyanyi Vokal"], correctText: "Drum / Perkusi", audio: { type: "inst", instrument: "drum" } },
+      { q: "Dengarkan dua nada (interval) yang dibunyikan secara berurutan berikut! Apakah arah pergerakan melodi nada tersebut?", options: ["Naik dari nada Rendah ke Tinggi (C ke G)", "Turun dari nada Tinggi ke Rendah", "Tetap pada nada yang sama", "Tidak memiliki nada sama sekali"], correctText: "Naik dari nada Rendah ke Tinggi (C ke G)", audio: { type: "pattern", notes: [{dur: 1, step: 1, freq: 261.63}, {dur: 1, step: 1, freq: 392.00}] } },
+      { q: "Dengarkan tangga nada Do-Re-Mi-Fa-Sol terlebih dahulu, lalu tebaklah 1 nada terakhir yang dibunyikan! Nada apakah itu?", options: ["Nada Do (C)", "Nada Mi (E)", "Nada Sol (G)", "Nada Re (D)"], correctText: "Nada Mi (E)", audio: { type: "solfeggio_quiz", targetFreq: 329.63 } },
+      { q: "Dengarkan patokan nada Do-Re-Mi-Fa-Sol, lalu simak 1 nada terakhir yang diputar. Nada apakah yang kamu dengar?", options: ["Nada Do (C)", "Nada Re (D)", "Nada Fa (F)", "Nada Sol (G)"], correctText: "Nada Sol (G)", audio: { type: "solfeggio_quiz", targetFreq: 392.00 } }
+    ];
+
+    // BANK SOAL TEORI MUSIK
+    var rawQuestionsPool = [
+      { q: "Penggunaan metronome pada komputer saat latihan bertujuan utama untuk...", options: ["Menentukan kencangnya suara nyanyian", "Menjaga ketepatan dan konsistensi tempo", "Mengatur tinggi rendahnya nada angklung", "Menggantikan peran guru dalam mengajar"], correctText: "Menjaga ketepatan dan konsistensi tempo" },
+      { q: "Rentang tempo 60-70 BPM yang digunakan guru termasuk dalam kategori tempo...", options: ["Sangat cepat (Presto)", "Cepat (Allegro)", "Sedang/Lambat (Andante / Adagio)", "Sangat cepat sekali (Prestissimo)"], correctText: "Sedang/Lambat (Andante / Adagio)" },
+      { q: "Penghitungan angka \"1, 2, 3, 4\" yang dinyanyikan secara keras bertujuan untuk...", options: ["Membantu siswa merasakan ketukan (beat) secara pasti", "Menghafal lirik lagu Ibu Kita Kartini", "Melatih kemampuan vokal nada tinggi", "Menentukan akor lagu yang akan dimainkan"], correctText: "Membantu siswa merasakan ketukan (beat) secara pasti" },
+      { q: "Istilah BPM dalam pengaturan tempo musik merupakan singkatan dari...", options: ["Beat Per Minute", "Bass Per Minute", "Bar Per Minute", "Band Per Minute"], correctText: "Beat Per Minute" },
+      { q: "Ketika tepuk tangan dilakukan pada setiap suku kata nama sesuai beat metronom, kegiatan tersebut melatih...", options: ["Harmoni vokal", "Artikulasi nada", "Sensitivitas ritme dan tempo", "Ketangkasan bermain angklung"], correctText: "Sensitivitas ritme dan tempo" },
+      { q: "Jika nama seorang siswa adalah \"ZULKARNAEN\", maka jumlah tepukan tangan yang dilakukan sesuai beat adalah...", options: ["2 tepukan", "3 tepukan", "4 tepukan", "5 tepukan"], correctText: "4 tepukan" },
+      { q: "Satuan untuk mengukur kecepatan tempo musik adalah...", options: ["Hertz (Hz)", "Decibel (dB)", "Beat Per Minute (BPM)", "Oktav"], correctText: "Beat Per Minute (BPM)" },
+      { q: "Perubahan tempo dari 60 BPM menjadi 70 BPM menandakan bahwa musik berjalan...", options: ["Semakin lambat", "Semakin cepat", "Semakin keras", "Semakin pelan"], correctText: "Semakin cepat" },
+      { q: "Menghitung \"1, 2, 3, 4\" secara berulang mengindikasikan bahwa lagu yang dipelajari menggunakan birama...", options: ["2/4", "3/4", "4/4", "6/8"], correctText: "4/4" },
+      { q: "Semerbak mewangi dikota dumai, kelanjutan lirik Mars SMPN Binaan Khusus Kota Dumai adalah...", options: ["Mengharumkan nama bangsa Indonesia", "Unggul di dalam pendidikan", "Berprestasi di segala bidang", "Menjadi Impian kota Dumai"], correctText: "Mengharumkan nama bangsa Indonesia" },
+      { q: "Kegiatan tepuk tangan ke arah depan, kiri, kanan, dan atas melatih keterampilan...", options: ["Peningkatan jangkauan nada", "Koordinasi motorik dan kepekaan ritmis", "Penguasaan instrumen terompet", "Teknik pernapasan diafragma"], correctText: "Koordinasi motorik dan kepekaan ritmis" },
+      { q: "Urutan tepukan pada tahapan ke-3 skenario pembelajaran Seni Musik di Kelas adalah...", options: ["Depan -> Kiri -> Kanan -> Atas", "Paha -> Kiri -> Kanan -> Atas", "Atas -> Paha -> Kanan -> Kiri", "Kiri -> Kanan -> Depan -> Atas"], correctText: "Paha -> Kiri -> Kanan -> Atas" },
+      { q: "Aktivitas berdiri, mengangkat kaki kanan, mengangkat kaki kiri, lalu menghadap kanan dan kiri bermanfaat untuk...", options: ["Menghafal nada C, D, E, F, G", "Menyelaraskan gerak tubuh dengan ketukan tempo", "Mengatur pernapasan saat bernyanyi", "Memilih instrumen yang tepat"], correctText: "Menyelaraskan gerak tubuh dengan ketukan tempo" },
+      { q: "Penggunaan gerak anggota tubuh untuk menghasilkan ritme musik disebut...", options: ["Vokal grup", "Body percussion (Perkusi tubuh)", "Solfeggio", "Akustik"], correctText: "Body percussion (Perkusi tubuh)" },
+      { q: "Gerakan tubuh yang tidak sesuai dengan ketukan metronom menunjukkan bahwa murid...", options: ["Belum menjaga konsistensi tempo", "Memiliki nada vokal yang bagus", "Sudah menguasai akor C Mayor", "Sangat mahir bermain drum"], correctText: "Belum menjaga konsistensi tempo" },
+      { q: "Pada simulasi drumset, anggota tubuh yang dimainkan bersamaan pada hitungan 1 dan 3 adalah...", options: ["Tangan kanan dan tangan kiri", "Kaki kanan dan tangan kanan", "Kaki kiri dan tangan kiri", "Kaki kanan dan tangan kiri"], correctText: "Kaki kanan dan tangan kanan" },
+      { q: "Anggota tubuh yang dimainkan bersamaan pada hitungan 2 dan 4 adalah...", options: ["Kaki kanan dan tangan kanan", "Tangan kanan dan tangan kiri", "Kaki kiri dan tangan kiri", "Kaki kanan dan kaki kiri"], correctText: "Tangan kanan dan tangan kiri" },
+      { q: "Kaki kanan pada simulasi drumset mengimitasi peran instrumen drum berupa...", options: ["Snare drum", "Bass drum (Kick drum)", "Hi-hat/Cymbal", "Tom-tom"], correctText: "Bass drum (Kick drum)" },
+      { q: "Peran utama drumset dalam lagu ansambel seperti \"Ibu Kita Kartini\" adalah...", options: ["Memainkan melodi utama", "Menjaga tempo dan memberikan fondasi ritmik", "Mengisi harmoni akor", "Menyanyikan syair lagu"], correctText: "Menjaga tempo dan memberikan fondasi ritmik" },
+      { q: "Tanah tumpah darahku, pada lagu Indonesia Raya, KU berada pada hitungan ...", options: ["1", "3", "4", "2"], correctText: "1" },
+      { q: "Lagu Mars SMPN Binaan Khusus Kota Dumai, Pencipta dan dibuat tahun...", options: ["Zulkarnaen, 2005", "Tulus,2005 ", "Andrigo, 2011", "Dewa, 2020"], correctText: "Zulkarnaen, 2005" },
+      { q: "Lagu \"Ibu Kita Kartini\" diciptakan oleh...", options: ["C. Simanjuntak", "W.R. Soepratman", "Ismail Marzuki", "L. Manik"], correctText: "W.R. Soepratman" },
+      { q: "Nada pembentuk Akor C Mayor pada Kelompok 1 terdiri dari nada...", options: ["C - E - G", "C - E - A", "F - A - C", "G - B - D"], correctText: "C - E - G" },
+      { q: "Kelompok 2 memainkan Akor Dm (D minor) yang terdiri dari nada...", options: ["D - E - G", "D - F - A", "F - A - C", "G - B - D"], correctText: "D - F - A" },
+      { q: "Susunan nada F - A - C merupakan pembentuk akor...", options: ["C Mayor", "D minor", "F Mayor", "G Mayor"], correctText: "F Mayor" },
+      { q: "Akor G Mayor yang dimainkan oleh Kelompok 4 terdiri dari susunan nada...", options: ["C - E - G", "D - F - A", "G - A - C", "G - B - D"], correctText: "G - B - D" },
+      { q: "Berdasarkan jenisnya, instrumen musik Angklung dimainkan dengan cara...", options: ["Dipukul", "Digetarkan", "Ditiup", "Dipetik"], correctText: "Digetarkan" },
+      { q: "Secara umum, pengertian musik adalah...", options: ["Kumpulan suara atau bunyi yang diatur sedemikian rupa sehingga memiliki irama, lagu, dan keharmonisan", "Coretan warna pada media kanvas yang membentuk keindahan", "Gerakan tubuh yang dilakukan secara berulang sesuai dengan cerita", "Kumpulan kata-kata indah yang dirangkai tanpa nada"], correctText: "Kumpulan suara atau bunyi yang diatur sedemikian rupa sehingga memiliki irama, lagu, dan keharmonisan" },
+      { q: "Rangkaian dari sejumlah nada atau bunyi berdasarkan tinggi rendahnya yang teratur disebut...", options: ["Melodi", "Irama / Ritme", "Akor", "Dinamika"], correctText: "Melodi" },
+      { q: "Unsur dasar musik yang mengatur panjang pendeknya bunyi dan alur ketukan waktu adalah...", options: ["Dinamika", "Ritme", "Harmoni", "Timbre"], correctText: "Ritme" },
+      { q: "Bunyi gabungan dua nada atau lebih yang dibunyikan secara bersamaan sehingga terdengar selaras disebut...", options: ["Melodi", "Harmoni / Akor", "Tempo", "Vokal"], correctText: "Harmoni / Akor" },
+      { q: "Keras lembutnya suara yang dinyanyikan atau dimainkan dalam sebuah musik dinamakan...", options: ["Dinamika", "Tempo", "Pitch", "Gaya"], correctText: "Dinamika" },
+      { q: "Kualitas atau warna bunyi yang membedakan satu instrumen dengan instrumen lainnya dinamakan...", options: ["Timbre", "Melodi", "Tangga nada", "Birama"], correctText: "Timbre" },
+      { q: "Alat musik yang berfungsi memainkan melodi utama dalam lagu dinamakan alat musik...", options: ["Melodis", "Ritmis", "Harmonis", "Pengiring"], correctText: "Melodis" },
+      { q: "Alat musik yang tidak memiliki nada tetap dan berfungsi menjaga ketukan/ritme dinamakan alat musik...", options: ["Ritmis", "Melodis", "Harmonis", "Solfeggio"], correctText: "Ritmis" },
+      { q: "Mengapa belajar musik sangat penting untuk pembentukan karakter siswa di sekolah?", options: ["Melatih kedisiplinan, kesabaran, dan konsentrasi tinggi", "Agar bisa menjadi artis terkenal secara instan", "Supaya bisa berteriak sesuka hati di dalam kelas", "Menghindari pelajaran teori di kelas"], correctText: "Melatih kedisiplinan, kesabaran, dan konsentrasi tinggi" },
+      { q: "Saat teman sedang melakukan kesalahan saat bernyanyi atau bermain musik, sikap yang benar adalah...", options: ["Tidak mengejek dan memberikan semangat serta saran perbaikan", "Tertawa terbahak-bahak di depan kelas", "Menyuruh teman tersebut keluar dari kelompok", "Memarahi teman dengan kata-kata kasar"], correctText: "Tidak mengejek dan memberikan semangat serta saran perbaikan" },
+      { q: "Keuntungan utama latihan ansambel musik bersama bagi sikap siswa adalah melatih...", options: ["Sikap saling menghargai dan tidak egois", "Keinginan untuk menonjolkan diri sendiri", "Kemampuan berdebat dengan teman", "Kemampuan menguasai semua alat musik sendirian"], correctText: "Sikap saling menghargai dan tidak egois" },
+      { q: "Tujuan utama menyanyikan lagu-lagu nasional dan Indonesia Raya adalah untuk...", options: ["Menumbuhkan rasa cinta tanah air dan nasionalisme", "Sekadar memenuhi formalitas kegiatan upacara", "Memamerkan keindahan suara di depan umum", "Membuang waktu jam pelajaran"], correctText: "Menumbuhkan rasa cinta tanah air dan nasionalisme" },
+      { q: "Sikap tubuh yang benar dan wajib dilakukan saat menyanyikan lagu kebangsaan Indonesia Raya adalah...", options: ["Berdiri tegak, khidmat, dan penuh rasa hormat", "Duduk bersandar sambil melambaikan tangan", "Berdiri santai sambil berbicara dengan teman", "Berjalan-jalan di area lapangan"], correctText: "Berdiri tegak, khidmat, dan penuh rasa hormat" },
+      { q: "Lagu kebangsaan Indonesia Raya diciptakan oleh komponis nasional yaitu...", options: ["Wage Rudolf Soepratman", "Ismail Marzuki", "Kusbini", "Ibu Soed"], correctText: "Wage Rudolf Soepratman" },
+      { q: "Teknik pernapasan yang paling baik digunakan dalam bernyanyi adalah pernapasan...", options: ["Diafragma", "Dada", "Perut", "Hidung"], correctText: "Diafragma" },
+      { q: "Kejelasan dalam mengucapkan kata demi kata pada lirik lagu disebut...", options: ["Artikulasi", "Phrasering", "Intonasi", "Resonansi"], correctText: "Artikulasi" },
+      { q: "Ketepatan penyanyi dalam menjangkau tinggi rendahnya nada (pitch) dinamakan...", options: ["Intonasi", "Artikulasi", "Timbre", "Ambitus"], correctText: "Intonasi" },
+      { q: "Pencipta lagu Mars SMPN Binaan Khusus Kota Dumai dan tahun dicipta adalah...", options: ["Habibie, 1990", "Zulkarnaen, 2005", "Zulkifli, 2000", "Umar, 1991"], correctText: "Zulkarnaen, 2005" },
+      { q: "Bernyanyi secara bersama-sama dengan satu suara melodi yang sama dinamakan...", options: ["Bernyanyi Unisono", "Bernyanyi Acappella", "Bernyanyi Canon", "Bernyanyi Solo"], correctText: "Bernyanyi Unisono" },
+      { q: "Tanah tumpah darahku, pada lagu Indonesia Raya, KU berada pada hitungan ...", options: ["1", "3", "4", "2"], correctText: "1" },
+      { q: "Tujuan lagu Mars sekolah dibuat dann dinyanyikan adalah...", options: ["kebanggan dan memiliki", "adanya sekolah", "kehadiran dan kepergian", "sebagai proyek"], correctText: "kebanggan dan memiliki" },
+      { q: "Indonesia Tanah Airku, pada lagu Indonesia Raya, SIA berada pada hitungan ...", options: ["1", "3", "4", "2"], correctText: "2" }
+    ];
+
+    function shuffleArray(array) {
+      var arr = array.slice();
+      for (var i = arr.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+      }
+      return arr;
+    }
+
+    var combinedPool = audioQuestionsPool.concat(rawQuestionsPool);
+    var selectedQuestions = shuffleArray(combinedPool).slice(0, 50);
+
+    var studentName = "";
+    var studentClass = "";
+    var currentQIndex = -1;
+    var correctAnswersCount = 0;
+    var answeredCount = 0;
+    var timerInterval = null;
+    var QUESTION_TIME = 60;
+    var timeLeft = QUESTION_TIME;
+    var cheatCount = 0;
+    var MAX_CHEATS = 3;
+    var isAnswered = false;
+    var userAnswers = new Array(50).fill(null);
+
+    function validateAndStart() {
+      var nameInput = document.getElementById("student-name").value.trim();
+      var classInput = document.getElementById("student-class").value.trim();
+
+      if (nameInput === "" || classInput === "") {
+        alert("Harap isi Nama Lengkap dan Kelas terlebih dahulu!");
+        return;
+      }
+
+      studentName = nameInput;
+      studentClass = classInput;
+
+      document.getElementById("display-student-info").innerText = "Siswa: " + studentName + " | Kelas: " + studentClass;
+      
+      initAudioContext();
+      playMLSound('opening');
+      
+      startQuiz();
+    }
+
+    document.addEventListener("visibilitychange", function() {
+      if (document.hidden && document.getElementById("start-screen").style.display === "none") {
+        handleCheatViolation("Terdeteksi meninggalkan aplikasi kuis!");
+      }
+    });
+
+    window.addEventListener("blur", function() {
+      if (document.getElementById("start-screen").style.display === "none") {
+        handleCheatViolation("Terdeteksi keluar dari jendela kuis!");
+      }
+    });
+
+    document.addEventListener("contextmenu", function(e) { e.preventDefault(); });
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "F12" || (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) || (e.ctrlKey && e.key === "u")) {
+        e.preventDefault();
+        handleCheatViolation("Terdeteksi mencoba membuka DevTools!");
+      }
+    });
+
+    function handleCheatViolation(reason) {
+      cheatCount++;
+      clearInterval(timerInterval);
+      
+      var cheatScreen = document.getElementById("cheat-screen");
+      var cheatTitle = document.getElementById("cheat-title");
+      var cheatMsg = document.getElementById("cheat-msg");
+
+      if (cheatCount >= MAX_CHEATS) {
+        cheatTitle.innerText = "DISKUALIFIKASI!";
+        cheatMsg.innerText = "Anda telah melanggar aturan anti-curang sebanyak 3 kali.\nKuis dihentikan dan data pelanggaran tercatat.";
+        cheatScreen.querySelector("button").style.display = "none";
+        cheatScreen.style.display = "flex";
+        sendDataToGoogleSheets();
+      } else {
+        cheatTitle.innerText = `PERINGATAN CURANG (${cheatCount}/${MAX_CHEATS})`;
+        cheatMsg.innerText = reason + "\n\nJangan tinggalkan kuis atau membuka tab lain!";
+        cheatScreen.style.display = "flex";
+      }
+    }
+
+    function resumeQuiz() {
+      document.getElementById("cheat-screen").style.display = "none";
+      if (currentQIndex !== -1 && !isAnswered) startTimer();
+    }
+
+    function startQuiz() {
+      document.getElementById("start-screen").style.display = "none";
+      renderGridTiles();
+    }
+
+    function renderGridTiles() {
+      var gridContainer = document.getElementById("tiles-container");
+      gridContainer.innerHTML = "";
+      for (var i = 0; i < selectedQuestions.length; i++) {
+        var btn = document.createElement("button");
+        btn.className = "tile-btn";
+        btn.id = "tile-" + i;
+        btn.innerText = (i + 1);
+        btn.onclick = (function(idx) {
+          return function() { openQuestionModal(idx); };
+        })(i);
+        gridContainer.appendChild(btn);
+      }
+    }
+
+    function openQuestionModal(index) {
+      if (userAnswers[index] !== null) return;
+
+      currentQIndex = index;
+      isAnswered = false;
+      timeLeft = QUESTION_TIME;
+
+      var qData = selectedQuestions[currentQIndex];
+      document.getElementById("question-text").innerText = qData.q;
+      
+      var audioBtn = document.getElementById("audio-play-btn");
+      if (qData.audio) {
+        audioBtn.style.display = "inline-flex";
+        playQuestionSound();
+      } else {
+        audioBtn.style.display = "none";
+      }
+
+      var shuffledOptions = shuffleArray(qData.options);
+      var grid = document.getElementById("options-grid");
+      grid.innerHTML = "";
+
+      shuffledOptions.forEach(function(optText) {
+        var btn = document.createElement("button");
+        btn.className = "opt-btn";
+        btn.innerText = optText;
+        btn.onclick = function() { selectAnswer(btn, optText, qData.correctText); };
+        grid.appendChild(btn);
+      });
+
+      document.getElementById("modal-overlay").style.display = "flex";
+      startTimer();
+    }
+
+    function closeModalDirectly() {
+      clearInterval(timerInterval);
+      document.getElementById("modal-overlay").style.display = "none";
+      currentQIndex = -1;
+    }
+
+    function playQuestionSound() {
+      if (currentQIndex !== -1 && selectedQuestions[currentQIndex].audio) {
+        playAudioPattern(selectedQuestions[currentQIndex].audio);
+      }
+    }
+
+    function startTimer() {
+      updateTimerUI();
+      timerInterval = setInterval(function() {
+        timeLeft--;
+        updateTimerUI();
+
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          timeOutAnswer();
+        }
+      }, 1000);
+    }
+
+    function updateTimerUI() {
+      var minutes = Math.floor(timeLeft / 60);
+      var seconds = timeLeft % 60;
+      var timeStr = (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+      
+      document.getElementById("timer-text").innerText = timeStr;
+      
+      var percentage = (timeLeft / QUESTION_TIME) * 100;
+      var bar = document.getElementById("timer-bar");
+      bar.style.width = percentage + "%";
+
+      if (timeLeft <= 10) {
+        bar.style.background = "#ef4444";
+      } else if (timeLeft <= 30) {
+        bar.style.background = "#ffe600";
+      } else {
+        bar.style.background = "linear-gradient(90deg, #00f0ff, #ff007f)";
+      }
+    }
+
+    function selectAnswer(selectedBtn, selectedText, correctText) {
+      if (isAnswered) return;
+      isAnswered = true;
+      clearInterval(timerInterval);
+
+      var isCorrect = (selectedText === correctText);
+      userAnswers[currentQIndex] = isCorrect;
+      answeredCount++;
+
+      if (isCorrect) {
+        playSFX('correct');
+      } else {
+        playSFX('wrong');
+      }
+
+      var allBtns = document.querySelectorAll(".opt-btn");
+      allBtns.forEach(function(btn) {
+        btn.disabled = true;
+        if (btn.innerText === correctText) {
+          btn.classList.add("correct");
+        } else if (btn === selectedBtn && !isCorrect) {
+          btn.classList.add("wrong");
+        }
+      });
+
+      var tile = document.getElementById("tile-" + currentQIndex);
+      if (isCorrect) {
+        correctAnswersCount++;
+        tile.classList.add("correct");
+      } else {
+        tile.classList.add("wrong");
+      }
+      tile.disabled = true;
+
+      updateOverallProgress();
+
+      setTimeout(function() {
+        showHeroBoost(isCorrect);
+      }, 800);
+    }
+
+    function timeOutAnswer() {
+      if (isAnswered) return;
+      isAnswered = true;
+      userAnswers[currentQIndex] = false;
+      answeredCount++;
+
+      playSFX('wrong');
+
+      var qData = selectedQuestions[currentQIndex];
+      var allBtns = document.querySelectorAll(".opt-btn");
+      
+      allBtns.forEach(function(btn) {
+        btn.disabled = true;
+        if (btn.innerText === qData.correctText) {
+          btn.classList.add("correct");
+        }
+      });
+
+      var tile = document.getElementById("tile-" + currentQIndex);
+      tile.classList.add("wrong");
+      tile.disabled = true;
+
+      updateOverallProgress();
+
+      setTimeout(function() {
+        showHeroBoost(false);
+      }, 800);
+    }
+
+    function updateOverallProgress() {
+      var calculatedScore = correctAnswersCount * 2;
+      document.getElementById("q-counter").innerText = `Terjawab: ${answeredCount} / ${selectedQuestions.length} Soal`;
+      document.getElementById("score-badge").innerText = "SKOR: " + calculatedScore;
+
+      document.getElementById("finish-btn").style.display = "inline-block";
+    }
+
+    function sendDataToGoogleSheets() {
+      var finalScore = correctAnswersCount * 2;
+      var payload = {
+        timestamp: new Date().toLocaleString("id-ID"),
+        nama: studentName,
+        kelas: studentClass,
+        benar: correctAnswersCount,
+        totalSoal: selectedQuestions.length,
+        skor: finalScore,
+        pelanggaran: cheatCount
+      };
+
+      if (SCRIPT_URL && SCRIPT_URL.indexOf("AKfycb") !== -1) {
+        fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        }).catch(function(err) {
+          console.error("Gagal mengirim data:", err);
+        });
+      }
+    }
+
+    function finishQuiz() {
+      clearInterval(timerInterval);
+      var finalScore = correctAnswersCount * 2;
+      
+      sendDataToGoogleSheets();
+
+      if (finalScore >= 70) {
+        speakText("Victory! You are legendary!", "en-US");
+      } else {
+        speakText("Defeat! Better luck next time!", "en-US");
+      }
+
+      document.body.innerHTML = `
+        <div style="min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#0f0c1b; color:#fff; text-align:center; padding:20px;">
+          <h1 style="color:#ffe600; font-size:30px; margin-bottom:15px; text-transform:uppercase; text-shadow:0 0 10px #ffe600;">GAME OVER! 🏆</h1>
+          <p style="color:#00f0ff; font-size:15px; margin-bottom:20px;">Data nilai Anda telah berhasil terdata di sistem Google Sheets.</p>
+          <div style="background:#1a162b; border:3px solid #ff007f; padding:20px; border-radius:20px; width:100%; max-width:350px; margin-bottom:20px; text-align:left; box-shadow:0 0 20px rgba(255,0,127,0.3);">
+            <p style="font-size:15px; margin-bottom:8px; color:#00f0ff;">Nama: <strong>${studentName}</strong></p>
+            <p style="font-size:15px; margin-bottom:15px; color:#00f0ff;">Kelas: <strong>${studentClass}</strong></p>
+            <hr style="border:0; border-top:1px solid #7928ca; margin-bottom:15px;">
+            <p style="font-size:16px; margin-bottom:10px;">Soal Terjawab: <strong>${answeredCount} / ${selectedQuestions.length} Soal</strong></p>
+            <p style="font-size:16px; margin-bottom:10px;">Jawaban Benar: <strong style="color:#10b981;">${correctAnswersCount} Soal</strong></p>
+            <p style="font-size:16px; margin-bottom:10px;">Pelanggaran Curang: <strong style="color:${cheatCount > 0 ? '#ef4444' : '#10b981'};">${cheatCount} Kali</strong></p>
+            <p style="font-size:26px; font-weight:900; color:#ffe600; margin-top:10px; text-shadow:0 0 10px #ffe600;">NILAI AKHIR: ${finalScore}</p>
+          </div>
+          <button onclick="location.reload()" style="background:linear-gradient(135deg, #00f0ff, #7928ca); color:#fff; font-size:18px; font-weight:bold; padding:14px 35px; border:2px solid #fff; border-radius:30px; cursor:pointer; box-shadow:0 0 15px rgba(0,240,255,0.5);">MAIN LAGI 🔄</button>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
