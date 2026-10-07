@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>KUIS MUSIK KELAS 7 - MOBILE LEGENDS EDITION</title>
+  <title>KUIS EAR TRAINING MUSIK KELAS 7 UNGGUL - MLBB EDITION</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; -webkit-user-select: none; }
     body { background: #0f0c1b; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; padding: 10px; overflow-x: hidden; }
@@ -186,8 +186,8 @@
 
     /* Start Screen Overlay */
     .start-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #2d264a 0%, #0f0c1b 100%); z-index: 9998; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; overflow-y: auto; }
-    .start-title { color: #00f0ff; font-size: 32px; font-weight: 900; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 15px #00f0ff, 0 0 30px #00f0ff; }
-    .start-subtitle { color: #ff007f; font-size: 18px; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 10px #ff007f; }
+    .start-title { color: #00f0ff; font-size: 28px; font-weight: 900; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 15px #00f0ff, 0 0 30px #00f0ff; }
+    .start-subtitle { color: #ff007f; font-size: 16px; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 10px #ff007f; }
     
     /* Input Form Siswa */
     .student-form { background: #1a162b; border: 3px solid #ff007f; padding: 20px; border-radius: 16px; width: 100%; max-width: 360px; margin-bottom: 20px; text-align: left; box-shadow: 0 0 20px rgba(255, 0, 127, 0.3); }
@@ -231,7 +231,7 @@
   <!-- Screen Awal / Start Game Trending -->
   <div class="start-screen" id="start-screen">
     <div class="start-title">ZULKARNAEN</div>
-    <div class="start-subtitle">🎮 KUIS MUSIK SMP 🎮</div>
+    <div class="start-subtitle">🎧 KUIS EAR TRAINING UNGGUL 🎧</div>
     
     <div class="student-form">
       <div class="form-group">
@@ -240,19 +240,18 @@
       </div>
       <div class="form-group" style="margin-bottom:0;">
         <label for="student-class">Kelas:</label>
-        <input type="text" id="student-class" placeholder="Contoh: 7A / 7.1" autocomplete="off">
+        <input type="text" id="student-class" placeholder="Contoh: 7 Unggul / 7.1" autocomplete="off">
       </div>
     </div>
 
     <div class="rule-box">
-      <strong style="color:#ffe600; display:block; margin-bottom:6px; text-transform:uppercase;">ATURAN PERMAINAN:</strong>
+      <strong style="color:#ffe600; display:block; margin-bottom:6px; text-transform:uppercase;">ATURAN EAR TRAINING:</strong>
       <ul>
-        <li>🎲 <strong>Ubin 3D:</strong> Bebas memilih ubin mana saja untuk dijawab terlebih dahulu.</li>
-        <li>💯 <strong>Sistem Skor:</strong> Tiap soal bernilai 2 poin (Total 50 Soal = 100 Poin).</li>
-        <li>⏱️ <strong>Waktu Soal:</strong> 1 Menit (60 Detik) per soal yang dibuka.</li>
-        <li>🔊 <strong>Soal Bersuara:</strong> Tekan tombol speaker untuk mendengarkan audio nada/ritme.</li>
-        <li>🚫 <strong>Anti-Curang:</strong> Dilarang pindah tab/aplikasi saat bermain.</li>
-        <li>📊 <strong>Rekap Otomatis:</strong> Hasil kuis langsung terkirim ke Google Sheets guru.</li>
+        <li>🎧 <strong>50 Soal Pendengaran:</strong> Seluruh soal melatih pendengaran nada solfeggio & pola ritme.</li>
+        <li>🎼 <strong>Patokan Solfeggio:</strong> Audio memutarkan Do-Re-Mi-Fa-Sol dulu, lalu memutar nada tebakan.</li>
+        <li>💯 <strong>Sistem Skor:</strong> Tiap soal bernilai 2 poin (Total = 100 Poin Maksimal).</li>
+        <li>⏱️ <strong>Waktu Soal:</strong> 1 Menit (60 Detik) per soal.</li>
+        <li>🚫 <strong>Anti-Curang:</strong> Dilarang pindah tab/aplikasi saat kuis berlangsung.</li>
       </ul>
     </div>
     <button class="start-btn" onclick="validateAndStart()">START GAME 🚀</button>
@@ -267,7 +266,7 @@
     </div>
   </div>
 
-  <!-- Grid Ubin Soal 3D -->
+  <!-- Grid Ubin Soal 3D (1-50) -->
   <div class="tiles-container" id="tiles-container"></div>
 
   <!-- Tombol Selesai Kuis -->
@@ -279,7 +278,7 @@
   <div class="modal-overlay" id="modal-overlay">
     <div class="modal-card">
       <div class="modal-header">
-        <div class="modal-title">Pertanyaan Soal</div>
+        <div class="modal-title">Soal Ear Training</div>
         <button class="close-modal-btn" onclick="closeModalDirectly()">✕ Batal</button>
       </div>
 
@@ -290,8 +289,8 @@
 
       <div class="question-box" id="question-box">
         <span id="question-text">Memuat soal...</span>
-        <button id="audio-play-btn" class="audio-btn" style="display:none;" onclick="playQuestionSound()">
-          🔊 Putar Suara Nada / Ritme
+        <button id="audio-play-btn" class="audio-btn" onclick="playQuestionSound()">
+          🔊 Putar Audio Pendengaran
         </button>
       </div>
 
@@ -315,7 +314,19 @@
     let audioCtx = null;
     let currentVoiceAudio = null;
 
-    // KALIMAT HERO 1 KATA (SUPER RINGKAS & SERU)
+    // FREKUENSI NADA SOLFEGGIO STANDAR
+    const FREQ = {
+      C4: 261.63, // Do
+      D4: 293.66, // Re
+      E4: 329.63, // Mi
+      F4: 349.23, // Fa
+      G4: 392.00, // Sol
+      A4: 440.00, // La
+      B4: 493.88, // Si
+      C5: 523.25  // Do (Tinggi)
+    };
+
+    // KALIMAT HERO MLBB 1 KATA
     const correctHeroes = [
       { name: "ALUCARD", icon: "⚔️", quote: "MANTAP!" },
       { name: "MIYA", icon: "🏹", quote: "FOKUS!" },
@@ -332,6 +343,94 @@
       { name: "NANA", icon: "🐱", quote: "BISA YUK!" }
     ];
 
+    // EXACT 50 BANK SOAL EAR TRAINING (PAS 50 SOAL)
+    var selectedQuestions = [
+      // 1-5: TEBAK 1 NADA TUNGGAL DENGAN PATOKAN DO-RE-MI-FA-SOL
+      { q: "Dengarkan tangga nada Do-Re-Mi-Fa-Sol sebagai patokan, lalu tebaklah 1 nada terakhir yang dibunyikan!", options: ["Nada Do (C)", "Nada Re (D)", "Nada Mi (E)", "Nada Fa (F)"], correctText: "Nada Do (C)", audio: { type: "solfeggio_quiz", targetFreq: FREQ.C4 } },
+      { q: "Dengarkan tangga nada Do-Re-Mi-Fa-Sol sebagai patokan, lalu tebaklah 1 nada terakhir yang dibunyikan!", options: ["Nada Do (C)", "Nada Re (D)", "Nada Mi (E)", "Nada Sol (G)"], correctText: "Nada Re (D)", audio: { type: "solfeggio_quiz", targetFreq: FREQ.D4 } },
+      { q: "Dengarkan patokan Do-Re-Mi-Fa-Sol, lalu tebak 1 nada terakhir yang diperdengarkan!", options: ["Nada Do (C)", "Nada Mi (E)", "Nada Fa (F)", "Nada Sol (G)"], correctText: "Nada Mi (E)", audio: { type: "solfeggio_quiz", targetFreq: FREQ.E4 } },
+      { q: "Dengarkan patokan Do-Re-Mi-Fa-Sol, lalu tebak 1 nada terakhir yang diperdengarkan!", options: ["Nada Re (D)", "Nada Mi (E)", "Nada Fa (F)", "Nada Sol (G)"], correctText: "Nada Fa (F)", audio: { type: "solfeggio_quiz", targetFreq: FREQ.F4 } },
+      { q: "Dengarkan patokan Do-Re-Mi-Fa-Sol, lalu tebak 1 nada terakhir yang diperdengarkan!", options: ["Nada Mi (E)", "Nada Fa (F)", "Nada Sol (G)", "Nada Do (C)"], correctText: "Nada Sol (G)", audio: { type: "solfeggio_quiz", targetFreq: FREQ.G4 } },
+
+      // 6-10: TEBAK 2 NADA (INTERVAL)
+      { q: "Dengarkan 2 nada berurutan berikut setelah nada patokan! Dua nada apakah itu?", options: ["Do - Mi", "Do - Re", "Do - Sol", "Re - Mi"], correctText: "Do - Mi", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.8, step: 0.8, freq: FREQ.C4}, {dur: 0.8, step: 0.8, freq: FREQ.E4}] } },
+      { q: "Dengarkan 2 nada berurutan berikut setelah nada patokan! Dua nada apakah itu?", options: ["Do - Sol", "Re - Sol", "Mi - Sol", "Do - Fa"], correctText: "Do - Sol", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.8, step: 0.8, freq: FREQ.C4}, {dur: 0.8, step: 0.8, freq: FREQ.G4}] } },
+      { q: "Dengarkan 2 nada berurutan berikut! Dua nada apakah yang diperdengarkan?", options: ["Sol - Fa", "Sol - Mi", "Sol - Do", "Fa - Mi"], correctText: "Sol - Mi", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.8, step: 0.8, freq: FREQ.G4}, {dur: 0.8, step: 0.8, freq: FREQ.E4}] } },
+      { q: "Dengarkan 2 nada berurutan berikut! Dua nada apakah yang diperdengarkan?", options: ["Re - Fa", "Do - Re", "Mi - Sol", "Re - Sol"], correctText: "Re - Fa", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.8, step: 0.8, freq: FREQ.D4}, {dur: 0.8, step: 0.8, freq: FREQ.F4}] } },
+      { q: "Dengarkan 2 nada berurutan berikut! Dua nada apakah yang diperdengarkan?", options: ["Mi - Re", "Fa - Mi", "Sol - Fa", "Mi - Do"], correctText: "Mi - Re", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.8, step: 0.8, freq: FREQ.E4}, {dur: 0.8, step: 0.8, freq: FREQ.D4}] } },
+
+      // 11-15: TEBAK 3 NADA (MELODI SOLFEGGIO)
+      { q: "Dengarkan 3 nada melodi berikut! Susunan nada yang dimainkan adalah...", options: ["Do - Re - Mi", "Do - Mi - Sol", "Re - Mi - Fa", "Mi - Fa - Sol"], correctText: "Do - Re - Mi", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.6, step: 0.6, freq: FREQ.C4}, {dur: 0.6, step: 0.6, freq: FREQ.D4}, {dur: 0.6, step: 0.6, freq: FREQ.E4}] } },
+      { q: "Dengarkan 3 nada melodi berikut! Susunan nada yang dimainkan adalah...", options: ["Do - Mi - Sol", "Do - Re - Mi", "Mi - Fa - Sol", "Do - Fa - Sol"], correctText: "Do - Mi - Sol", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.6, step: 0.6, freq: FREQ.C4}, {dur: 0.6, step: 0.6, freq: FREQ.E4}, {dur: 0.6, step: 0.6, freq: FREQ.G4}] } },
+      { q: "Dengarkan 3 nada melodi berikut! Susunan nada yang dimainkan adalah...", options: ["Sol - Fa - Mi", "Sol - Mi - Do", "Fa - Mi - Re", "Sol - Re - Do"], correctText: "Sol - Fa - Mi", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.6, step: 0.6, freq: FREQ.G4}, {dur: 0.6, step: 0.6, freq: FREQ.F4}, {dur: 0.6, step: 0.6, freq: FREQ.E4}] } },
+      { q: "Dengarkan 3 nada melodi berikut! Susunan nada yang dimainkan adalah...", options: ["Sol - Mi - Do", "Sol - Fa - Mi", "Mi - Re - Do", "Sol - Re - Do"], correctText: "Sol - Mi - Do", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.6, step: 0.6, freq: FREQ.G4}, {dur: 0.6, step: 0.6, freq: FREQ.E4}, {dur: 0.6, step: 0.6, freq: FREQ.C4}] } },
+      { q: "Dengarkan 3 nada melodi berikut! Susunan nada yang dimainkan adalah...", options: ["Re - Fa - Sol", "Do - Re - Mi", "Re - Mi - Fa", "Mi - Fa - Sol"], correctText: "Re - Fa - Sol", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.6, step: 0.6, freq: FREQ.D4}, {dur: 0.6, step: 0.6, freq: FREQ.F4}, {dur: 0.6, step: 0.6, freq: FREQ.G4}] } },
+
+      // 16-18: TEBAK ARAH PERGERAKAN MELODI
+      { q: "Dengarkan pergerakan 2 nada berikut! Apakah arah pergerakan nada tersebut?", options: ["Melodi Naik (Rendah ke Tinggi)", "Melodi Turun (Tinggi ke Rendah)", "Nada Tetap (Mendatar)", "Tidak Memiliki Nada"], correctText: "Melodi Naik (Rendah ke Tinggi)", audio: { type: "pattern", notes: [{dur: 0.8, step: 0.8, freq: FREQ.C4}, {dur: 0.8, step: 0.8, freq: FREQ.G4}] } },
+      { q: "Dengarkan pergerakan 2 nada berikut! Apakah arah pergerakan nada tersebut?", options: ["Melodi Turun (Tinggi ke Rendah)", "Melodi Naik (Rendah ke Tinggi)", "Nada Tetap (Mendatar)", "Tidak Memiliki Nada"], correctText: "Melodi Turun (Tinggi ke Rendah)", audio: { type: "pattern", notes: [{dur: 0.8, step: 0.8, freq: FREQ.G4}, {dur: 0.8, step: 0.8, freq: FREQ.C4}] } },
+      { q: "Dengarkan pergerakan 2 nada berikut! Apakah arah pergerakan nada tersebut?", options: ["Nada Tetap (Mendatar)", "Melodi Naik", "Melodi Turun", "Harmoni Berubah"], correctText: "Nada Tetap (Mendatar)", audio: { type: "pattern", notes: [{dur: 0.8, step: 0.8, freq: FREQ.E4}, {dur: 0.8, step: 0.8, freq: FREQ.E4}] } },
+
+      // 19-22: TEBAK DURASI KETUKAN (1, 2, 3, 4 KETUKAN)
+      { q: "Dengarkan bunyi tunggal berikut! Berapa jumlah ketukan nilai durasi bunyi yang baru saja kamu dengar?", options: ["1 Ketukan", "2 Ketukan", "3 Ketukan", "4 Ketukan"], correctText: "1 Ketukan", audio: { type: "single", duration: 1.0 } },
+      { q: "Dengarkan bunyi tunggal berikut! Berapa jumlah ketukan nilai durasi bunyi tersebut?", options: ["1 Ketukan", "2 Ketukan", "3 Ketukan", "4 Ketukan"], correctText: "2 Ketukan", audio: { type: "single", duration: 2.0 } },
+      { q: "Dengarkan bunyi tunggal berikut! Berapa jumlah ketukan nilai durasi bunyi tersebut?", options: ["1 Ketukan", "2 Ketukan", "3 Ketukan", "4 Ketukan"], correctText: "3 Ketukan", audio: { type: "single", duration: 3.0 } },
+      { q: "Dengarkan bunyi tunggal berikut! Berapa jumlah ketukan nilai durasi bunyi penuh tersebut?", options: ["1 Ketukan", "2 Ketukan", "3 Ketukan", "4 Ketukan"], correctText: "4 Ketukan", audio: { type: "single", duration: 4.0 } },
+
+      // 23-28: POLA RITME BIRAMA 4/4
+      { q: "Dengarkan kombinasi pola bunyi dalam 1 birama 4/4 berikut! Pola ketukan bunyinya adalah...", options: ["1 ketukan - 1 ketukan - 2 ketukan", "2 ketukan - 2 ketukan", "1 ketukan - 3 ketukan", "4 ketukan penuh"], correctText: "1 ketukan - 1 ketukan - 2 ketukan", audio: { type: "pattern", notes: [{dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 2, step: 2}] } },
+      { q: "Dengarkan kombinasi pola bunyi berikut! Nilai gabungan bunyi yang kamu dengar adalah...", options: ["2 ketukan - 1 ketukan - 1 ketukan", "1 ketukan - 1 ketukan - 2 ketukan", "3 ketukan - 1 ketukan", "2 ketukan - 2 ketukan"], correctText: "2 ketukan - 1 ketukan - 1 ketukan", audio: { type: "pattern", notes: [{dur: 2, step: 2}, {dur: 1, step: 1}, {dur: 1, step: 1}] } },
+      { q: "Dengarkan pola ritme berikut! Pola gabungan bunyi yang baru saja dimainkan adalah...", options: ["1 ketukan - 2 ketukan - 1 ketukan", "1 ketukan - 1 ketukan - 2 ketukan", "2 ketukan - 2 ketukan", "3 ketukan - 1 ketukan"], correctText: "1 ketukan - 2 ketukan - 1 ketukan", audio: { type: "pattern", notes: [{dur: 1, step: 1}, {dur: 2, step: 2}, {dur: 1, step: 1}] } },
+      { q: "Dengarkan gabungan pola bunyi berikut! Struktur ritme dalam 1 birama tersebut adalah...", options: ["3 ketukan - 1 ketukan", "1 ketukan - 3 ketukan", "2 ketukan - 2 ketukan", "1 ketukan - 1 ketukan - 2 ketukan"], correctText: "3 ketukan - 1 ketukan", audio: { type: "pattern", notes: [{dur: 3, step: 3}, {dur: 1, step: 1}] } },
+      { q: "Dengarkan kombinasi ritme berikut! Pola bunyi yang dimainkan adalah...", options: ["4 bunyi masing-masing 1 ketukan", "2 bunyi masing-masing 2 ketukan", "1 bunyi bernilai 4 ketukan", "3 ketukan - 1 ketukan"], correctText: "4 bunyi masing-masing 1 ketukan", audio: { type: "pattern", notes: [{dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 1, step: 1}] } },
+      { q: "Dengarkan kombinasi ritme berikut! Pola bunyi yang dimainkan adalah...", options: ["2 bunyi masing-masing 2 ketukan", "4 bunyi masing-masing 1 ketukan", "1 ketukan - 3 ketukan", "3 ketukan - 1 ketukan"], correctText: "2 bunyi masing-masing 2 ketukan", audio: { type: "pattern", notes: [{dur: 2, step: 2}, {dur: 2, step: 2}] } },
+
+      // 29-31: TEBAK WARNA SUARA / TIMBRE ALAT MUSIK
+      { q: "Dengarkan warna suara (timbre) audio berikut! Suara instrumen musik apakah ini?", options: ["Biola", "Gitar Akustik", "Drum", "Seruling"], correctText: "Biola", audio: { type: "inst", instrument: "violin" } },
+      { q: "Dengarkan warna suara instrumen berikut! Karakteristik bunyi tersebut milik...", options: ["Gitar Akustik", "Biola", "Drum", "Piano"], correctText: "Gitar Akustik", audio: { type: "inst", instrument: "guitar" } },
+      { q: "Dengarkan suara hentakan audio berikut! Alat musik ritmis yang menghasilkan bunyi tersebut adalah...", options: ["Drum / Kick Bass", "Biola", "Gitar", "Piano"], correctText: "Drum / Kick Bass", audio: { type: "inst", instrument: "drum" } },
+
+      // 32-36: SOLFEGGIO TARGET PITCH
+      { q: "Dengarkan patokan Do-Re-Mi-Fa-Sol, lalu tebak nada terakhir ini!", options: ["Nada Do (C)", "Nada Re (D)", "Nada Mi (E)", "Nada Fa (F)"], correctText: "Nada Do (C)", audio: { type: "solfeggio_quiz", targetFreq: FREQ.C4 } },
+      { q: "Dengarkan patokan Do-Re-Mi-Fa-Sol, lalu tebak nada terakhir ini!", options: ["Nada Do (C)", "Nada Re (D)", "Nada Mi (E)", "Nada Sol (G)"], correctText: "Nada Re (D)", audio: { type: "solfeggio_quiz", targetFreq: FREQ.D4 } },
+      { q: "Dengarkan patokan Do-Re-Mi-Fa-Sol, lalu tebak nada terakhir ini!", options: ["Nada Mi (E)", "Nada Fa (F)", "Nada Sol (G)", "Nada Do (C)"], correctText: "Nada Mi (E)", audio: { type: "solfeggio_quiz", targetFreq: FREQ.E4 } },
+      { q: "Dengarkan patokan Do-Re-Mi-Fa-Sol, lalu tebak nada terakhir ini!", options: ["Nada Fa (F)", "Nada Mi (E)", "Nada Re (D)", "Nada Sol (G)"], correctText: "Nada Fa (F)", audio: { type: "solfeggio_quiz", targetFreq: FREQ.F4 } },
+      { q: "Dengarkan patokan Do-Re-Mi-Fa-Sol, lalu tebak nada terakhir ini!", options: ["Nada Sol (G)", "Nada Fa (F)", "Nada Mi (E)", "Nada Do (C)"], correctText: "Nada Sol (G)", audio: { type: "solfeggio_quiz", targetFreq: FREQ.G4 } },
+
+      // 37-41: TEBAK DUA NADA BERURUTAN
+      { q: "Dengarkan 2 nada berikut! Nada apakah yang dimainkan berurutan?", options: ["Re - Mi", "Do - Re", "Mi - Fa", "Fa - Sol"], correctText: "Re - Mi", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.8, step: 0.8, freq: FREQ.D4}, {dur: 0.8, step: 0.8, freq: FREQ.E4}] } },
+      { q: "Dengarkan 2 nada berikut! Nada apakah yang dimainkan berurutan?", options: ["Mi - Fa", "Re - Mi", "Fa - Sol", "Do - Mi"], correctText: "Mi - Fa", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.8, step: 0.8, freq: FREQ.E4}, {dur: 0.8, step: 0.8, freq: FREQ.F4}] } },
+      { q: "Dengarkan 2 nada berikut! Nada apakah yang dimainkan berurutan?", options: ["Fa - Sol", "Mi - Fa", "Re - Fa", "Do - Sol"], correctText: "Fa - Sol", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.8, step: 0.8, freq: FREQ.F4}, {dur: 0.8, step: 0.8, freq: FREQ.G4}] } },
+      { q: "Dengarkan 2 nada berikut! Nada apakah yang dimainkan berurutan?", options: ["Sol - Fa", "Sol - Mi", "Fa - Mi", "Mi - Re"], correctText: "Sol - Fa", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.8, step: 0.8, freq: FREQ.G4}, {dur: 0.8, step: 0.8, freq: FREQ.F4}] } },
+      { q: "Dengarkan 2 nada berikut! Nada apakah yang dimainkan berurutan?", options: ["Fa - Mi", "Sol - Fa", "Mi - Re", "Re - Do"], correctText: "Fa - Mi", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.8, step: 0.8, freq: FREQ.F4}, {dur: 0.8, step: 0.8, freq: FREQ.E4}] } },
+
+      // 42-45: TEBAK TIGA NADA MELODI
+      { q: "Dengarkan melodi 3 nada berikut! Susunan nadanya adalah...", options: ["Do - Re - Mi - Fa", "Do - Mi - Fa", "Do - Re - Fa", "Re - Mi - Fa"], correctText: "Do - Re - Fa", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.6, step: 0.6, freq: FREQ.C4}, {dur: 0.6, step: 0.6, freq: FREQ.D4}, {dur: 0.6, step: 0.6, freq: FREQ.F4}] } },
+      { q: "Dengarkan melodi 3 nada berikut! Susunan nadanya adalah...", options: ["Mi - Fa - Sol", "Re - Mi - Sol", "Do - Mi - Sol", "Mi - Re - Do"], correctText: "Mi - Fa - Sol", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.6, step: 0.6, freq: FREQ.E4}, {dur: 0.6, step: 0.6, freq: FREQ.F4}, {dur: 0.6, step: 0.6, freq: FREQ.G4}] } },
+      { q: "Dengarkan melodi 3 nada berikut! Susunan nadanya adalah...", options: ["Mi - Re - Do", "Fa - Mi - Re", "Sol - Fa - Mi", "Sol - Mi - Do"], correctText: "Mi - Re - Do", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.6, step: 0.6, freq: FREQ.E4}, {dur: 0.6, step: 0.6, freq: FREQ.D4}, {dur: 0.6, step: 0.6, freq: FREQ.C4}] } },
+      { q: "Dengarkan melodi 3 nada berikut! Susunan nadanya adalah...", options: ["Fa - Mi - Re", "Sol - Fa - Mi", "Mi - Re - Do", "Sol - Mi - Do"], correctText: "Fa - Mi - Re", audio: { type: "pattern", notes: [{dur: 0.4, step: 0.4, freq: FREQ.C4}, {dur: 0.4, step: 0.4, freq: FREQ.D4}, {dur: 0.4, step: 0.4, freq: FREQ.E4}, {dur: 0.4, step: 0.4, freq: FREQ.F4}, {dur: 0.4, step: 0.6, freq: FREQ.G4}, {dur: 0.6, step: 0.6, freq: FREQ.F4}, {dur: 0.6, step: 0.6, freq: FREQ.E4}, {dur: 0.6, step: 0.6, freq: FREQ.D4}] } },
+
+      // 46-50: MULTI-BIRAMA RITME & IDENTIFIKASI NADA KHUSUS
+      { q: "Dengarkan ritme dua birama 4/4 ini! Struktur ketukan bunyinya adalah...", options: ["Birama 1: (1+1+2 ketukan), Birama 2: (2+2 ketukan)", "Birama 1: (2+2 ketukan), Birama 2: (1+1+1+1 ketukan)", "Birama 1: (4 ketukan), Birama 2: (4 ketukan)", "Birama 1: (3+1 ketukan), Birama 2: (2+2 ketukan)"], correctText: "Birama 1: (1+1+2 ketukan), Birama 2: (2+2 ketukan)", audio: { type: "pattern", notes: [{dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 2, step: 2}, {dur: 2, step: 2}, {dur: 2, step: 2}] } },
+      { q: "Dengarkan ritme dua birama 4/4 ini! Urutan ketukan bunyinya adalah...", options: ["Birama 1: 4 ketukan penuh | Birama 2: 4 ketukan penuh", "Birama 1: 2 ketukan | Birama 2: 2 ketukan", "Birama 1: 1 ketukan | Birama 2: 3 ketukan", "Birama 1: 3 ketukan | Birama 2: 1 ketukan"], correctText: "Birama 1: 4 ketukan penuh | Birama 2: 4 ketukan penuh", audio: { type: "pattern", notes: [{dur: 4, step: 4}, {dur: 4, step: 4}] } },
+      { q: "Dengarkan patokan Do-Re-Mi-Fa-Sol, lalu tebak nada paling tinggi yang bisa kamu dengar!", options: ["Nada Sol (G)", "Nada Fa (F)", "Nada Mi (E)", "Nada Do (C)"], correctText: "Nada Sol (G)", audio: { type: "solfeggio_quiz", targetFreq: FREQ.G4 } },
+      { q: "Dengarkan patokan Do-Re-Mi-Fa-Sol, lalu tebak nada paling rendah dari tangga nada tersebut!", options: ["Nada Do (C)", "Nada Re (D)", "Nada Mi (E)", "Nada Fa (F)"], correctText: "Nada Do (C)", audio: { type: "solfeggio_quiz", targetFreq: FREQ.C4 } },
+      { q: "Dengarkan patokan Do-Re-Mi-Fa-Sol, lalu tebak nada yang berada tepat di tengah (nada ke-3)!", options: ["Nada Mi (E)", "Nada Re (D)", "Nada Fa (F)", "Nada Sol (G)"], correctText: "Nada Mi (E)", audio: { type: "solfeggio_quiz", targetFreq: FREQ.E4 } }
+    ];
+
+    var studentName = "";
+    var studentClass = "";
+    var currentQIndex = -1;
+    var correctAnswersCount = 0;
+    var answeredCount = 0;
+    var timerInterval = null;
+    var QUESTION_TIME = 60;
+    var timeLeft = QUESTION_TIME;
+    var cheatCount = 0;
+    var MAX_CHEATS = 3;
+    var isAnswered = false;
+    var userAnswers = new Array(50).fill(null);
+
     function initAudioContext() {
       if (!audioCtx) {
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -344,14 +443,13 @@
       }
     }
 
-    // FUNGSI SUARA PENUTUR ASLI BAHASA INDONESIA (NATURAL VOICE)
+    // FUNGSI SUARA PENUTUR ASLI BAHASA INDONESIA
     function playNaturalVoice(text, onEndCallback) {
       if (currentVoiceAudio) {
         currentVoiceAudio.pause();
         currentVoiceAudio = null;
       }
 
-      // Menggunakan Google Natural Audio Engine ID yang Luwes & Alami
       const soundUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=id&client=tw-ob`;
       currentVoiceAudio = new Audio(soundUrl);
       
@@ -393,7 +491,6 @@
 
       heroModal.style.display = "flex";
 
-      // Memutar Suara Alami Singkat ("GAS!", "LANJUT!", "CAKEP!", "BISA YUK!")
       setTimeout(function() {
         playNaturalVoice(hero.quote);
       }, 150);
@@ -450,24 +547,26 @@
       const now = audioCtx.currentTime + 0.05;
 
       if (audioData.type === 'solfeggio_quiz') {
-        const scaleFreqs = [261.63, 293.66, 329.63, 349.23, 392.00]; 
+        const scaleFreqs = [FREQ.C4, FREQ.D4, FREQ.E4, FREQ.F4, FREQ.G4]; 
         let offset = 0;
         
+        // Putar Do-Re-Mi-Fa-Sol dulu sebagai patokan
         scaleFreqs.forEach(freq => {
           playTone(0.4, now + offset, 'sine', freq);
           offset += 0.5;
         });
 
+        // Jeda lalu putar nada tebakan target
         offset += 0.6;
-        playTone(1.5, now + offset, 'sine', audioData.targetFreq);
+        playTone(1.2, now + offset, 'sine', audioData.targetFreq);
 
       } else if (audioData.type === 'single') {
-        playTone(audioData.duration * beatSec, now, audioData.instrument || 'sine', audioData.freq || 523.25);
+        playTone(audioData.duration * beatSec, now, audioData.instrument || 'sine', audioData.freq || FREQ.C5);
       } else if (audioData.type === 'pattern') {
         let currentOffset = 0;
         audioData.notes.forEach(note => {
           if (note.dur > 0) {
-            playTone(note.dur * beatSec, now + currentOffset, note.inst || 'sine', note.freq || 523.25);
+            playTone(note.dur * beatSec, now + currentOffset, note.inst || 'sine', note.freq || FREQ.C5);
           }
           currentOffset += note.step * beatSec;
         });
@@ -520,89 +619,11 @@
         osc.start(startTime);
         osc.stop(startTime + 0.25);
       } else if (inst === 'guitar') {
-        playTone(1.5, startTime, 'guitar', 329.63);
+        playTone(1.5, startTime, 'guitar', FREQ.E4);
       } else if (inst === 'violin') {
-        playTone(2.0, startTime, 'violin', 440);
+        playTone(2.0, startTime, 'violin', FREQ.A4);
       }
     }
-
-    // BANK SOAL AUDIO
-    var audioQuestionsPool = [
-      { q: "Dengarkan suara bunyi berikut! Berapa jumlah ketukan nilai durasi bunyi tunggal yang baru saja kamu dengar?", options: ["1 Ketukan", "2 Ketukan", "3 Ketukan", "4 Ketukan"], correctText: "1 Ketukan", audio: { type: "single", duration: 1.0 } },
-      { q: "Dengarkan suara bunyi berikut! Berapa jumlah ketukan nilai durasi bunyi tunggal tersebut?", options: ["1 Ketukan", "2 Ketukan", "3 Ketukan", "4 Ketukan"], correctText: "2 Ketukan", audio: { type: "single", duration: 2.0 } },
-      { q: "Dengarkan kombinasi pola bunyi dalam 1 birama 4/4 berikut! Pola ketukan bunyi yang terdengar adalah...", options: ["1 ketukan - 1 ketukan - 2 ketukan", "2 ketukan - 2 ketukan", "1 ketukan - 3 ketukan", "4 ketukan penuh"], correctText: "1 ketukan - 1 ketukan - 2 ketukan", audio: { type: "pattern", notes: [{dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 2, step: 2}] } },
-      { q: "Dengarkan kombinasi pola bunyi berikut! Nilai gabungan bunyi yang kamu dengar dalam 1 birama adalah...", options: ["2 ketukan - 1 ketukan - 1 ketukan", "1 ketukan - 1 ketukan - 1 ketukan - 1 ketukan", "3 ketukan - 1 ketukan", "2 ketukan - 2 ketukan"], correctText: "2 ketukan - 1 ketukan - 1 ketukan", audio: { type: "pattern", notes: [{dur: 2, step: 2}, {dur: 1, step: 1}, {dur: 1, step: 1}] } },
-      { q: "Dengarkan pola ritme berikut! Pola gabungan bunyi yang baru saja dimainkan adalah...", options: ["1 ketukan - 2 ketukan - 1 ketukan", "1 ketukan - 1 ketukan - 2 ketukan", "2 ketukan - 2 ketukan", "3 ketukan - 1 ketukan"], correctText: "1 ketukan - 2 ketukan - 1 ketukan", audio: { type: "pattern", notes: [{dur: 1, step: 1}, {dur: 2, step: 2}, {dur: 1, step: 1}] } },
-      { q: "Dengarkan gabungan pola bunyi berikut! Struktur ritme dalam 1 birama tersebut adalah...", options: ["3 ketukan - 1 ketukan", "1 ketukan - 3 ketukan", "2 ketukan - 2 ketukan", "1 ketukan - 1 ketukan - 2 ketukan"], correctText: "3 ketukan - 1 ketukan", audio: { type: "pattern", notes: [{dur: 3, step: 3}, {dur: 1, step: 1}] } },
-      { q: "Dengarkan kombinasi ritme 1 birama 4/4 berikut! Pola bunyi yang dimainkan adalah...", options: ["4 bunyi masing-masing 1 ketukan", "2 bunyi masing-masing 2 ketukan", "1 bunyi bernilai 4 ketukan", "1 bunyi bernilai 3 ketukan & diam 1 ketukan"], correctText: "4 bunyi masing-masing 1 ketukan", audio: { type: "pattern", notes: [{dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 1, step: 1}] } },
-      { q: "Dengarkan alur bunyi dalam 2 birama 4/4 berikut! Gabungan durasi bunyi antar birama tersebut adalah...", options: ["Birama 1: (2+2 ketukan), Birama 2: (4 ketukan)", "Birama 1: (1+1+1+1 ketukan), Birama 2: (2+2 ketukan)", "Birama 1: (3+1 ketukan), Birama 2: (2+2 ketukan)", "Birama 1: (4 ketukan), Birama 2: (1+1+2 ketukan)"], correctText: "Birama 1: (2+2 ketukan), Birama 2: (4 ketukan)", audio: { type: "pattern", notes: [{dur: 2, step: 2}, {dur: 2, step: 2}, {dur: 4, step: 4}] } },
-      { q: "Dengarkan ritme dua birama berikut! Urutan gabungan bunyinya adalah...", options: ["Birama 1: (1+1+2 ketukan), Birama 2: (2+2 ketukan)", "Birama 1: (2+2 ketukan), Birama 2: (1+1+1+1 ketukan)", "Birama 1: (4 ketukan), Birama 2: (4 ketukan)", "Birama 1: (1+3 ketukan), Birama 2: (2+2 ketukan)"], correctText: "Birama 1: (1+1+2 ketukan), Birama 2: (2+2 ketukan)", audio: { type: "pattern", notes: [{dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 2, step: 2}, {dur: 2, step: 2}, {dur: 2, step: 2}] } },
-      { q: "Dengarkan 2 birama audio berikut! Bunyi yang dimainkan secara berurutan adalah...", options: ["Birama 1: 4 ketukan penuh | Birama 2: 4 ketukan penuh", "Birama 1: 2 ketukan | Birama 2: 2 ketukan", "Birama 1: 1 ketukan | Birama 2: 3 ketukan", "Birama 1: 3 ketukan | Birama 2: 1 ketukan"], correctText: "Birama 1: 4 ketukan penuh | Birama 2: 4 ketukan penuh", audio: { type: "pattern", notes: [{dur: 4, step: 4}, {dur: 4, step: 4}] } },
-      { q: "Dengarkan ritme gabungan dua birama ini! Struktur ketukan bunyinya adalah...", options: ["Birama 1: (1+1+1+1 ketukan), Birama 2: (1+1+2 ketukan)", "Birama 1: (2+2 ketukan), Birama 2: (3+1 ketukan)", "Birama 1: (4 ketukan), Birama 2: (2+2 ketukan)", "Birama 1: (1+3 ketukan), Birama 2: (1+1+1+1 ketukan)"], correctText: "Birama 1: (1+1+1+1 ketukan), Birama 2: (1+1+2 ketukan)", audio: { type: "pattern", notes: [{dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 1, step: 1}, {dur: 2, step: 2}] } },
-      { q: "Dengarkan warna suara (timbre) audio berikut! Suara instrumen musik yang dimainkan adalah...", options: ["Gitar", "Biola", "Drum / Perkusi", "Angklung"], correctText: "Biola", audio: { type: "inst", instrument: "violin" } },
-      { q: "Dengarkan warna suara instrumen berikut! Karakteristik bunyi tersebut milik instrumen...", options: ["Gitar", "Biola", "Drum / Perkusi", "Terompet"], correctText: "Gitar", audio: { type: "inst", instrument: "guitar" } },
-      { q: "Dengarkan suara hentakan audio berikut! Alat musik ritmis yang menghasilkan bunyi tersebut adalah...", options: ["Drum / Kick Bass", "Biola", "Gitar Akustik", "Piano"], correctText: "Drum / Kick Bass", audio: { type: "inst", instrument: "drum" } },
-      { q: "Dengarkan sampel instrumen musik gesek berikut! Alat musik apakah ini?", options: ["Biola", "Gitar", "Drumset", "Angklung"], correctText: "Biola", audio: { type: "inst", instrument: "violin" } },
-      { q: "Dengarkan suara petikan alat musik berikut! Instrumen melodis/harmonis yang dimaksud adalah...", options: ["Gitar", "Biola", "Drum", "Seruling"], correctText: "Gitar", audio: { type: "inst", instrument: "guitar" } },
-      { q: "Dengarkan pola bunyi gesekan panjang berikut! Alat musik gesek yang mampu menghasilkan durasi nada panjang ini adalah...", options: ["Biola", "Drum", "Gitar", "Kendang"], correctText: "Biola", audio: { type: "inst", instrument: "violin" } },
-      { q: "Dengarkan denyut ritmis berikut! Peran instrumen ritmis yang mendominasi seperti audio ini meilki...", options: ["Drum / Perkusi", "Gitar Akustik", "Biola", "Penyanyi Vokal"], correctText: "Drum / Perkusi", audio: { type: "inst", instrument: "drum" } },
-      { q: "Dengarkan dua nada (interval) yang dibunyikan secara berurutan berikut! Apakah arah pergerakan melodi nada tersebut?", options: ["Naik dari nada Rendah ke Tinggi (C ke G)", "Turun dari nada Tinggi ke Rendah", "Tetap pada nada yang sama", "Tidak memiliki nada sama sekali"], correctText: "Naik dari nada Rendah ke Tinggi (C ke G)", audio: { type: "pattern", notes: [{dur: 1, step: 1, freq: 261.63}, {dur: 1, step: 1, freq: 392.00}] } },
-      { q: "Dengarkan tangga nada Do-Re-Mi-Fa-Sol terlebih dahulu, lalu tebaklah 1 nada terakhir yang dibunyikan! Nada apakah itu?", options: ["Nada Do (C)", "Nada Mi (E)", "Nada Sol (G)", "Nada Re (D)"], correctText: "Nada Mi (E)", audio: { type: "solfeggio_quiz", targetFreq: 329.63 } },
-      { q: "Dengarkan patokan nada Do-Re-Mi-Fa-Sol, lalu simak 1 nada terakhir yang diputar. Nada apakah yang kamu dengar?", options: ["Nada Do (C)", "Nada Re (D)", "Nada Fa (F)", "Nada Sol (G)"], correctText: "Nada Sol (G)", audio: { type: "solfeggio_quiz", targetFreq: 392.00 } }
-    ];
-
-    // BANK SOAL TEORI MUSIK
-    var rawQuestionsPool = [
-      { q: "Penggunaan metronome pada komputer saat latihan bertujuan utama untuk...", options: ["Menentukan kencangnya suara nyanyian", "Menjaga ketepatan dan konsistensi tempo", "Mengatur tinggi rendahnya nada angklung", "Menggantikan peran guru dalam mengajar"], correctText: "Menjaga ketepatan dan konsistensi tempo" },
-      { q: "Rentang tempo 60-70 BPM yang digunakan guru termasuk dalam kategori tempo...", options: ["Sangat cepat (Presto)", "Cepat (Allegro)", "Sedang/Lambat (Andante / Adagio)", "Sangat cepat sekali (Prestissimo)"], correctText: "Sedang/Lambat (Andante / Adagio)" },
-      { q: "Penghitungan angka \"1, 2, 3, 4\" yang dinyanyikan secara keras bertujuan untuk...", options: ["Membantu siswa merasakan ketukan (beat) secara pasti", "Menghafal lirik lagu Ibu Kita Kartini", "Melatih kemampuan vokal nada tinggi", "Menentukan akor lagu yang akan dimainkan"], correctText: "Membantu siswa merasakan ketukan (beat) secara pasti" },
-      { q: "Istilah BPM dalam pengaturan tempo musik merupakan singkatan dari...", options: ["Beat Per Minute", "Bass Per Minute", "Bar Per Minute", "Band Per Minute"], correctText: "Beat Per Minute" },
-      { q: "Ketika tepuk tangan dilakukan pada setiap suku kata nama sesuai beat metronom, kegiatan tersebut melatih...", options: ["Harmoni vokal", "Artikulasi nada", "Sensitivitas ritme dan tempo", "Ketangkasan bermain angklung"], correctText: "Sensitivitas ritme dan tempo" },
-      { q: "Jika nama seorang siswa adalah \"ZULKARNAEN\", maka jumlah tepukan tangan yang dilakukan sesuai beat adalah...", options: ["2 tepukan", "3 tepukan", "4 tepukan", "5 tepukan"], correctText: "4 tepukan" },
-      { q: "Satuan untuk mengukur kecepatan tempo musik adalah...", options: ["Hertz (Hz)", "Decibel (dB)", "Beat Per Minute (BPM)", "Oktav"], correctText: "Beat Per Minute (BPM)" },
-      { q: "Perubahan tempo dari 60 BPM menjadi 70 BPM menandakan bahwa musik berjalan...", options: ["Semakin lambat", "Semakin cepat", "Semakin keras", "Semakin pelan"], correctText: "Semakin cepat" },
-      { q: "Menghitung \"1, 2, 3, 4\" secara berulang mengindikasikan bahwa lagu yang dipelajari menggunakan birama...", options: ["2/4", "3/4", "4/4", "6/8"], correctText: "4/4" },
-      { q: "Semerbak mewangi dikota dumai, kelanjutan lirik Mars SMPN Binaan Khusus Kota Dumai adalah...", options: ["Mengharumkan nama bangsa Indonesia", "Unggul di dalam pendidikan", "Berprestasi di segala bidang", "Menjadi Impian kota Dumai"], correctText: "Mengharumkan nama bangsa Indonesia" },
-      { q: "Kegiatan tepuk tangan ke arah depan, kiri, kanan, dan atas melatih keterampilan...", options: ["Peningkatan jangkauan nada", "Koordinasi motorik dan kepekaan ritmis", "Penguasaan instrumen terompet", "Teknik pernapasan diafragma"], correctText: "Koordinasi motorik dan kepekaan ritmis" },
-      { q: "Urutan tepukan pada tahapan ke-3 skenario pembelajaran Seni Musik di Kelas adalah...", options: ["Depan -> Kiri -> Kanan -> Atas", "Paha -> Kiri -> Kanan -> Atas", "Atas -> Paha -> Kanan -> Kiri", "Kiri -> Kanan -> Depan -> Atas"], correctText: "Paha -> Kiri -> Kanan -> Atas" },
-      { q: "Aktivitas berdiri, mengangkat kaki kanan, mengangkat kaki kiri, lalu menghadap kanan dan kiri bermanfaat untuk...", options: ["Menghafal nada C, D, E, F, G", "Menyelaraskan gerak tubuh dengan ketukan tempo", "Mengatur pernapasan saat bernyanyi", "Memilih instrumen yang tepat"], correctText: "Menyelaraskan gerak tubuh dengan ketukan tempo" },
-      { q: "Penggunaan gerak anggota tubuh untuk menghasilkan ritme musik disebut...", options: ["Vokal grup", "Body percussion (Perkusi tubuh)", "Solfeggio", "Akustik"], correctText: "Body percussion (Perkusi tubuh)" },
-      { q: "Gerakan tubuh yang tidak sesuai dengan ketukan metronom menunjukkan bahwa murid...", options: ["Belum menjaga konsistensi tempo", "Memiliki nada vokal yang bagus", "Sudah menguasai akor C Mayor", "Sangat mahir bermain drum"], correctText: "Belum menjaga konsistensi tempo" },
-      { q: "Pada simulasi drumset, anggota tubuh yang dimainkan bersamaan pada hitungan 1 dan 3 adalah...", options: ["Tangan kanan dan tangan kiri", "Kaki kanan dan tangan kanan", "Kaki kiri dan tangan kiri", "Kaki kanan dan tangan kiri"], correctText: "Kaki kanan dan tangan kanan" },
-      { q: "Anggota tubuh yang dimainkan bersamaan pada hitungan 2 dan 4 adalah...", options: ["Kaki kanan dan tangan kanan", "Tangan kanan dan tangan kiri", "Kaki kiri dan tangan kiri", "Kaki kanan dan kaki kiri"], correctText: "Tangan kanan dan tangan kiri" },
-      { q: "Kaki kanan pada simulasi drumset mengimitasi peran instrumen drum berupa...", options: ["Snare drum", "Bass drum (Kick drum)", "Hi-hat/Cymbal", "Tom-tom"], correctText: "Bass drum (Kick drum)" },
-      { q: "Peran utama drumset dalam lagu ansambel seperti \"Ibu Kita Kartini\" adalah...", options: ["Memainkan melodi utama", "Menjaga tempo dan memberikan fondasi ritmik", "Mengisi harmoni akor", "Menyanyikan syair lagu"], correctText: "Menjaga tempo dan memberikan fondasi ritmik" },
-      { q: "Tanah tumpah darahku, pada lagu Indonesia Raya, KU berada pada hitungan ...", options: ["1", "3", "4", "2"], correctText: "1" },
-      { q: "Lagu Mars SMPN Binaan Khusus Kota Dumai, Pencipta dan dibuat tahun...", options: ["Zulkarnaen, 2005", "Tulus,2005 ", "Andrigo, 2011", "Dewa, 2020"], correctText: "Zulkarnaen, 2005" },
-      { q: "Lagu \"Ibu Kita Kartini\" diciptakan oleh...", options: ["C. Simanjuntak", "W.R. Soepratman", "Ismail Marzuki", "L. Manik"], correctText: "W.R. Soepratman" },
-      { q: "Nada pembentuk Akor C Mayor pada Kelompok 1 terdiri dari nada...", options: ["C - E - G", "C - E - A", "F - A - C", "G - B - D"], correctText: "C - E - G" },
-      { q: "Kelompok 2 memainkan Akor Dm (D minor) yang terdiri dari nada...", options: ["D - E - G", "D - F - A", "F - A - C", "G - B - D"], correctText: "D - F - A" },
-      { q: "Susunan nada F - A - C merupakan pembentuk akor...", options: ["C Mayor", "D minor", "F Mayor", "G Mayor"], correctText: "F Mayor" },
-      { q: "Akor G Mayor yang dimainkan oleh Kelompok 4 terdiri dari susunan nada...", options: ["C - E - G", "D - F - A", "G - A - C", "G - B - D"], correctText: "G - B - D" },
-      { q: "Berdasarkan jenisnya, instrumen musik Angklung dimainkan dengan cara...", options: ["Dipukul", "Digetarkan", "Ditiup", "Dipetik"], correctText: "Digetarkan" },
-      { q: "Secara umum, pengertian musik adalah...", options: ["Kumpulan suara atau bunyi yang diatur sedemikian rupa sehingga memiliki irama, lagu, dan keharmonisan", "Coretan warna pada media kanvas yang membentuk keindahan", "Gerakan tubuh yang dilakukan secara berulang sesuai dengan cerita", "Kumpulan kata-kata indah yang dirangkai tanpa nada"], correctText: "Kumpulan suara atau bunyi yang diatur sedemikian rupa sehingga memiliki irama, lagu, dan keharmonisan" },
-      { q: "Rangkaian dari sejumlah nada atau bunyi berdasarkan tinggi rendahnya yang teratur disebut...", options: ["Melodi", "Irama / Ritme", "Akor", "Dinamika"], correctText: "Melodi" },
-      { q: "Unsur dasar musik yang mengatur panjang pendeknya bunyi dan alur ketukan waktu adalah...", options: ["Dinamika", "Ritme", "Harmoni", "Timbre"], correctText: "Ritme" },
-      { q: "Bunyi gabungan dua nada atau lebih yang dibunyikan secara bersamaan sehingga terdengar selaras disebut...", options: ["Melodi", "Harmoni / Akor", "Tempo", "Vokal"], correctText: "Harmoni / Akor" },
-      { q: "Keras lembutnya suara yang dinyanyikan atau dimainkan dalam sebuah musik dinamakan...", options: ["Dinamika", "Tempo", "Pitch", "Gaya"], correctText: "Dinamika" },
-      { q: "Kualitas atau warna bunyi yang membedakan satu instrumen dengan instrumen lainnya dinamakan...", options: ["Timbre", "Melodi", "Tangga nada", "Birama"], correctText: "Timbre" },
-      { q: "Alat musik yang berfungsi memainkan melodi utama dalam lagu dinamakan alat musik...", options: ["Melodis", "Ritmis", "Harmonis", "Pengiring"], correctText: "Melodis" },
-      { q: "Alat musik yang tidak memiliki nada tetap dan berfungsi menjaga ketukan/ritme dinamakan alat musik...", options: ["Ritmis", "Melodis", "Harmonis", "Solfeggio"], correctText: "Ritmis" },
-      { q: "Mengapa belajar musik sangat penting untuk pembentukan karakter siswa di sekolah?", options: ["Melatih kedisiplinan, kesabaran, dan konsentrasi tinggi", "Agar bisa menjadi artis terkenal secara instan", "Supaya bisa berteriak sesuka hati di dalam kelas", "Menghindari pelajaran teori di kelas"], correctText: "Melatih kedisiplinan, kesabaran, dan konsentrasi tinggi" },
-      { q: "Saat teman sedang melakukan kesalahan saat bernyanyi atau bermain musik, sikap yang benar adalah...", options: ["Tidak mengejek dan memberikan semangat serta saran perbaikan", "Tertawa terbahak-bahak di depan kelas", "Menyuruh teman tersebut keluar dari kelompok", "Memarahi teman dengan kata-kata kasar"], correctText: "Tidak mengejek dan memberikan semangat serta saran perbaikan" },
-      { q: "Keuntungan utama latihan ansambel musik bersama bagi sikap siswa adalah melatih...", options: ["Sikap saling menghargai dan tidak egois", "Keinginan untuk menonjolkan diri sendiri", "Kemampuan berdebat dengan teman", "Kemampuan menguasai semua alat musik sendirian"], correctText: "Sikap saling menghargai dan tidak egois" },
-      { q: "Tujuan utama menyanyikan lagu-lagu nasional dan Indonesia Raya adalah untuk...", options: ["Menumbuhkan rasa cinta tanah air dan nasionalisme", "Sekadar memenuhi formalitas kegiatan upacara", "Memamerkan keindahan suara di depan umum", "Membuang waktu jam pelajaran"], correctText: "Menumbuhkan rasa cinta tanah air dan nasionalisme" },
-      { q: "Sikap tubuh yang benar dan wajib dilakukan saat menyanyikan lagu kebangsaan Indonesia Raya adalah...", options: ["Berdiri tegak, khidmat, dan penuh rasa hormat", "Duduk bersandar sambil melambaikan tangan", "Berdiri santai sambil berbicara dengan teman", "Berjalan-jalan di area lapangan"], correctText: "Berdiri tegak, khidmat, dan penuh rasa hormat" },
-      { q: "Lagu kebangsaan Indonesia Raya diciptakan oleh komponis nasional yaitu...", options: ["Wage Rudolf Soepratman", "Ismail Marzuki", "Kusbini", "Ibu Soed"], correctText: "Wage Rudolf Soepratman" },
-      { q: "Teknik pernapasan yang paling baik digunakan dalam bernyanyi adalah pernapasan...", options: ["Diafragma", "Dada", "Perut", "Hidung"], correctText: "Diafragma" },
-      { q: "Kejelasan dalam mengucapkan kata demi kata pada lirik lagu disebut...", options: ["Artikulasi", "Phrasering", "Intonasi", "Resonansi"], correctText: "Artikulasi" },
-      { q: "Ketepatan penyanyi dalam menjangkau tinggi rendahnya nada (pitch) dinamakan...", options: ["Intonasi", "Artikulasi", "Timbre", "Ambitus"], correctText: "Intonasi" },
-      { q: "Pencipta lagu Mars SMPN Binaan Khusus Kota Dumai dan tahun dicipta adalah...", options: ["Habibie, 1990", "Zulkarnaen, 2005", "Zulkifli, 2000", "Umar, 1991"], correctText: "Zulkarnaen, 2005" },
-      { q: "Bernyanyi secara bersama-sama dengan satu suara melodi yang sama dinamakan...", options: ["Bernyanyi Unisono", "Bernyanyi Acappella", "Bernyanyi Canon", "Bernyanyi Solo"], correctText: "Bernyanyi Unisono" },
-      { q: "Tanah tumpah darahku, pada lagu Indonesia Raya, KU berada pada hitungan ...", options: ["1", "3", "4", "2"], correctText: "1" },
-      { q: "Tujuan lagu Mars sekolah dibuat dann dinyanyikan adalah...", options: ["kebanggan dan memiliki", "adanya sekolah", "kehadiran dan kepergian", "sebagai proyek"], correctText: "kebanggan dan memiliki" },
-      { q: "Indonesia Tanah Airku, pada lagu Indonesia Raya, SIA berada pada hitungan ...", options: ["1", "3", "4", "2"], correctText: "2" }
-    ];
 
     function shuffleArray(array) {
       var arr = array.slice();
@@ -615,23 +636,6 @@
       return arr;
     }
 
-    var combinedPool = audioQuestionsPool.concat(rawQuestionsPool);
-    var selectedQuestions = shuffleArray(combinedPool).slice(0, 50);
-
-    var studentName = "";
-    var studentClass = "";
-    var currentQIndex = -1;
-    var correctAnswersCount = 0;
-    var answeredCount = 0;
-    var timerInterval = null;
-    var QUESTION_TIME = 60;
-    var timeLeft = QUESTION_TIME;
-    var cheatCount = 0;
-    var MAX_CHEATS = 3;
-    var isAnswered = false;
-    var userAnswers = new Array(50).fill(null);
-
-    // DITAMBAHKAN: PROSES DARI ISI NAMA HINGGA MEMUTAR SUARA SELAMAT DATANG LALU MASUK GAME
     function validateAndStart() {
       var nameInput = document.getElementById("student-name").value.trim();
       var classInput = document.getElementById("student-class").value.trim();
@@ -648,12 +652,10 @@
       
       initAudioContext();
       
-      // Memutar Suara Alami "Selamat datang di Zulkarnaen Kuis Musik SMP! Selamat bermain!"
       playNaturalVoice("Selamat datang di Zulkarnaen Kuis Musik SMP! Selamat bermain!", function() {
         startQuiz();
       });
 
-      // Tetap transisi ke kuis langsung apabila browser memblok autoplay
       setTimeout(function() {
         if (document.getElementById("start-screen").style.display !== "none") {
           startQuiz();
@@ -737,13 +739,7 @@
       var qData = selectedQuestions[currentQIndex];
       document.getElementById("question-text").innerText = qData.q;
       
-      var audioBtn = document.getElementById("audio-play-btn");
-      if (qData.audio) {
-        audioBtn.style.display = "inline-flex";
-        playQuestionSound();
-      } else {
-        audioBtn.style.display = "none";
-      }
+      playQuestionSound();
 
       var shuffledOptions = shuffleArray(qData.options);
       var grid = document.getElementById("options-grid");
@@ -915,15 +911,15 @@
       sendDataToGoogleSheets();
 
       if (finalScore >= 70) {
-        playNaturalVoice("Selamat! Nilai kamu sangat memuaskan!");
+        playNaturalVoice("Selamat! Pendengaran nada kamu sangat luar biasa!");
       } else {
-        playNaturalVoice("Tetap semangat ya! Ayo tingkatkan lagi!");
+        playNaturalVoice("Tetap semangat ya! Ayo latih lagi pendengaran nada kamu!");
       }
 
       document.body.innerHTML = `
         <div style="min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#0f0c1b; color:#fff; text-align:center; padding:20px;">
           <h1 style="color:#ffe600; font-size:30px; margin-bottom:15px; text-transform:uppercase; text-shadow:0 0 10px #ffe600;">GAME OVER! 🏆</h1>
-          <p style="color:#00f0ff; font-size:15px; margin-bottom:20px;">Data nilai Anda telah berhasil terdata di sistem Google Sheets.</p>
+          <p style="color:#00f0ff; font-size:15px; margin-bottom:20px;">Data nilai Ear Training telah berhasil terdata di sistem Google Sheets.</p>
           <div style="background:#1a162b; border:3px solid #ff007f; padding:20px; border-radius:20px; width:100%; max-width:350px; margin-bottom:20px; text-align:left; box-shadow:0 0 20px rgba(255,0,127,0.3);">
             <p style="font-size:15px; margin-bottom:8px; color:#00f0ff;">Nama: <strong>${studentName}</strong></p>
             <p style="font-size:15px; margin-bottom:15px; color:#00f0ff;">Kelas: <strong>${studentClass}</strong></p>
