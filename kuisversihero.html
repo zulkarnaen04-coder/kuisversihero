@@ -247,9 +247,9 @@
     <div class="rule-box">
       <strong style="color:#ffe600; display:block; margin-bottom:6px; text-transform:uppercase;">ATURAN EAR TRAINING:</strong>
       <ul>
-        <li>🎧 <strong>50 Soal Pendengaran:</strong> Seluruh soal melatih pendengaran nada solfeggio & pola ritme.</li>
+        <li>🎧 <strong>50 Soal Pendengaran:</strong> Murni melatih pendengaran nada solfeggio & pola ritme.</li>
         <li>🎼 <strong>Patokan Solfeggio:</strong> Audio memutarkan Do-Re-Mi-Fa-Sol dulu, lalu memutar nada tebakan.</li>
-        <li>💯 <strong>Sistem Skor:</strong> Tiap soal bernilai 2 poin (Total = 100 Poin Maksimal).</li>
+        <li>💯 <strong>Sistem Skor:</strong> Tiap soal bernilai 2 poin (Total Maksimal = 100 Poin).</li>
         <li>⏱️ <strong>Waktu Soal:</strong> 1 Menit (60 Detik) per soal.</li>
         <li>🚫 <strong>Anti-Curang:</strong> Dilarang pindah tab/aplikasi saat kuis berlangsung.</li>
       </ul>
@@ -266,7 +266,7 @@
     </div>
   </div>
 
-  <!-- Grid Ubin Soal 3D (PASTI 1-50) -->
+  <!-- Grid Ubin Soal 3D (PASTI CUMA 1-50) -->
   <div class="tiles-container" id="tiles-container"></div>
 
   <!-- Tombol Selesai Kuis -->
@@ -314,19 +314,10 @@
     let audioCtx = null;
     let currentVoiceAudio = null;
 
-    // FREKUENSI NADA SOLFEGGIO
     const FREQ = {
-      C4: 261.63, // Do
-      D4: 293.66, // Re
-      E4: 329.63, // Mi
-      F4: 349.23, // Fa
-      G4: 392.00, // Sol
-      A4: 440.00, // La
-      B4: 493.88, // Si
-      C5: 523.25  // Do (Tinggi)
+      C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88, C5: 523.25
     };
 
-    // HERO QUOTES
     const correctHeroes = [
       { name: "ALUCARD", icon: "⚔️", quote: "MANTAP!" },
       { name: "MIYA", icon: "🏹", quote: "FOKUS!" },
@@ -343,8 +334,8 @@
       { name: "NANA", icon: "🐱", quote: "BISA YUK!" }
     ];
 
-    // EXACT 50 BANK SOAL EAR TRAINING
-    var rawQuestions = [
+    // BANK SOAL TERKUNCI PERSIS 50 SOAL
+    var selectedQuestions = [
       { q: "Dengarkan tangga nada Do-Re-Mi-Fa-Sol sebagai patokan, lalu tebaklah 1 nada terakhir yang dibunyikan!", options: ["Nada Do (C)", "Nada Re (D)", "Nada Mi (E)", "Nada Fa (F)"], correctText: "Nada Do (C)", audio: { type: "solfeggio_quiz", targetFreq: FREQ.C4 } },
       { q: "Dengarkan tangga nada Do-Re-Mi-Fa-Sol sebagai patokan, lalu tebaklah 1 nada terakhir yang dibunyikan!", options: ["Nada Do (C)", "Nada Re (D)", "Nada Mi (E)", "Nada Sol (G)"], correctText: "Nada Re (D)", audio: { type: "solfeggio_quiz", targetFreq: FREQ.D4 } },
       { q: "Dengarkan patokan Do-Re-Mi-Fa-Sol, lalu tebak 1 nada terakhir yang diperdengarkan!", options: ["Nada Do (C)", "Nada Mi (E)", "Nada Fa (F)", "Nada Sol (G)"], correctText: "Nada Mi (E)", audio: { type: "solfeggio_quiz", targetFreq: FREQ.E4 } },
@@ -407,9 +398,6 @@
       { q: "Dengarkan patokan Do-Re-Mi-Fa-Sol, lalu tebak nada yang berada tepat di tengah (nada ke-3)!", options: ["Nada Mi (E)", "Nada Re (D)", "Nada Fa (F)", "Nada Sol (G)"], correctText: "Nada Mi (E)", audio: { type: "solfeggio_quiz", targetFreq: FREQ.E4 } }
     ];
 
-    // DIPASTIKAN PAS CUMA 50 SOAL (TIDAK LEBIH)
-    var selectedQuestions = rawQuestions.slice(0, 50);
-
     var studentName = "";
     var studentClass = "";
     var currentQIndex = -1;
@@ -426,13 +414,9 @@
     function initAudioContext() {
       if (!audioCtx) {
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (AudioContextClass) {
-          audioCtx = new AudioContextClass();
-        }
+        if (AudioContextClass) audioCtx = new AudioContextClass();
       }
-      if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
     }
 
     function playNaturalVoice(text, onEndCallback) {
@@ -440,14 +424,9 @@
         currentVoiceAudio.pause();
         currentVoiceAudio = null;
       }
-
       const soundUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=id&client=tw-ob`;
       currentVoiceAudio = new Audio(soundUrl);
-      
-      if (onEndCallback) {
-        currentVoiceAudio.onended = onEndCallback;
-      }
-
+      if (onEndCallback) currentVoiceAudio.onended = onEndCallback;
       currentVoiceAudio.play().catch(function(err) {
         if ('speechSynthesis' in window) {
           window.speechSynthesis.cancel();
@@ -466,31 +445,19 @@
       const heroName = document.getElementById("hero-name");
       const heroQuote = document.getElementById("hero-quote");
 
-      let hero;
-      if (isCorrect) {
-        hero = correctHeroes[Math.floor(Math.random() * correctHeroes.length)];
-        heroCard.className = "hero-card correct-style";
-      } else {
-        hero = wrongHeroes[Math.floor(Math.random() * wrongHeroes.length)];
-        heroCard.className = "hero-card wrong-style";
-      }
+      let hero = isCorrect ? correctHeroes[Math.floor(Math.random() * correctHeroes.length)] : wrongHeroes[Math.floor(Math.random() * wrongHeroes.length)];
+      heroCard.className = isCorrect ? "hero-card correct-style" : "hero-card wrong-style";
 
       heroIcon.innerText = hero.icon;
       heroName.innerText = hero.name;
       heroQuote.innerText = `"${hero.quote}"`;
-
       heroModal.style.display = "flex";
 
-      setTimeout(function() {
-        playNaturalVoice(hero.quote);
-      }, 150);
+      setTimeout(function() { playNaturalVoice(hero.quote); }, 150);
     }
 
     function closeHeroModal() {
-      if (currentVoiceAudio) {
-        currentVoiceAudio.pause();
-        currentVoiceAudio = null;
-      }
+      if (currentVoiceAudio) { currentVoiceAudio.pause(); currentVoiceAudio = null; }
       if ('speechSynthesis' in window) window.speechSynthesis.cancel();
       document.getElementById("hero-modal").style.display = "none";
       document.getElementById("modal-overlay").style.display = "none";
@@ -500,62 +467,49 @@
     function playSFX(type) {
       initAudioContext();
       if (!audioCtx) return;
-
       const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
 
       if (type === 'correct') {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
         osc.type = 'sine';
         osc.frequency.setValueAtTime(880, now);
         gain.gain.setValueAtTime(0.2, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.2);
-      } else if (type === 'wrong') {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
+      } else {
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(150, now);
         gain.gain.setValueAtTime(0.2, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.2);
       }
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.2);
     }
 
     function playAudioPattern(audioData) {
       initAudioContext();
       if (!audioCtx) return;
-
-      const bpm = 60; 
+      const bpm = 60;
       const beatSec = 60 / bpm;
       const now = audioCtx.currentTime + 0.05;
 
       if (audioData.type === 'solfeggio_quiz') {
         const scaleFreqs = [FREQ.C4, FREQ.D4, FREQ.E4, FREQ.F4, FREQ.G4]; 
         let offset = 0;
-        
         scaleFreqs.forEach(freq => {
           playTone(0.4, now + offset, 'sine', freq);
           offset += 0.5;
         });
-
         offset += 0.6;
         playTone(1.2, now + offset, 'sine', audioData.targetFreq);
-
       } else if (audioData.type === 'single') {
         playTone(audioData.duration * beatSec, now, audioData.instrument || 'sine', audioData.freq || FREQ.C5);
       } else if (audioData.type === 'pattern') {
         let currentOffset = 0;
         audioData.notes.forEach(note => {
-          if (note.dur > 0) {
-            playTone(note.dur * beatSec, now + currentOffset, note.inst || 'sine', note.freq || FREQ.C5);
-          }
+          if (note.dur > 0) playTone(note.dur * beatSec, now + currentOffset, note.inst || 'sine', note.freq || FREQ.C5);
           currentOffset += note.step * beatSec;
         });
       } else if (audioData.type === 'inst') {
@@ -627,27 +581,17 @@
     function validateAndStart() {
       var nameInput = document.getElementById("student-name").value.trim();
       var classInput = document.getElementById("student-class").value.trim();
-
       if (nameInput === "" || classInput === "") {
         alert("Harap isi Nama Lengkap dan Kelas terlebih dahulu!");
         return;
       }
-
       studentName = nameInput;
       studentClass = classInput;
-
       document.getElementById("display-student-info").innerText = "Siswa: " + studentName + " | Kelas: " + studentClass;
-      
       initAudioContext();
-      
-      playNaturalVoice("Selamat datang di Zulkarnaen Kuis Musik SMP! Selamat bermain!", function() {
-        startQuiz();
-      });
-
+      playNaturalVoice("Selamat datang di Zulkarnaen Kuis Musik SMP! Selamat bermain!", function() { startQuiz(); });
       setTimeout(function() {
-        if (document.getElementById("start-screen").style.display !== "none") {
-          startQuiz();
-        }
+        if (document.getElementById("start-screen").style.display !== "none") startQuiz();
       }, 3500);
     }
 
@@ -674,7 +618,6 @@
     function handleCheatViolation(reason) {
       cheatCount++;
       clearInterval(timerInterval);
-      
       var cheatScreen = document.getElementById("cheat-screen");
       var cheatTitle = document.getElementById("cheat-title");
       var cheatMsg = document.getElementById("cheat-msg");
@@ -702,10 +645,13 @@
       renderGridTiles();
     }
 
+    /* KUNCI PAKSA RENDERING GRID MAKSIMAL CUMA 50 UBIN */
     function renderGridTiles() {
       var gridContainer = document.getElementById("tiles-container");
       gridContainer.innerHTML = "";
-      for (var i = 0; i < selectedQuestions.length; i++) {
+      
+      // DIKUNCI HANYA 50 KALI PERULANGAN
+      for (var i = 0; i < 50; i++) {
         var btn = document.createElement("button");
         btn.className = "tile-btn";
         btn.id = "tile-" + i;
@@ -719,14 +665,12 @@
 
     function openQuestionModal(index) {
       if (userAnswers[index] !== null) return;
-
       currentQIndex = index;
       isAnswered = false;
       timeLeft = QUESTION_TIME;
 
       var qData = selectedQuestions[currentQIndex];
       document.getElementById("question-text").innerText = qData.q;
-      
       playQuestionSound();
 
       var shuffledOptions = shuffleArray(qData.options);
@@ -762,7 +706,6 @@
       timerInterval = setInterval(function() {
         timeLeft--;
         updateTimerUI();
-
         if (timeLeft <= 0) {
           clearInterval(timerInterval);
           timeOutAnswer();
@@ -774,7 +717,6 @@
       var minutes = Math.floor(timeLeft / 60);
       var seconds = timeLeft % 60;
       var timeStr = (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-      
       document.getElementById("timer-text").innerText = timeStr;
       
       var percentage = (timeLeft / QUESTION_TIME) * 100;
@@ -799,20 +741,13 @@
       userAnswers[currentQIndex] = isCorrect;
       answeredCount++;
 
-      if (isCorrect) {
-        playSFX('correct');
-      } else {
-        playSFX('wrong');
-      }
+      if (isCorrect) playSFX('correct'); else playSFX('wrong');
 
       var allBtns = document.querySelectorAll(".opt-btn");
       allBtns.forEach(function(btn) {
         btn.disabled = true;
-        if (btn.innerText === correctText) {
-          btn.classList.add("correct");
-        } else if (btn === selectedBtn && !isCorrect) {
-          btn.classList.add("wrong");
-        }
+        if (btn.innerText === correctText) btn.classList.add("correct");
+        else if (btn === selectedBtn && !isCorrect) btn.classList.add("wrong");
       });
 
       var tile = document.getElementById("tile-" + currentQIndex);
@@ -825,10 +760,7 @@
       tile.disabled = true;
 
       updateOverallProgress();
-
-      setTimeout(function() {
-        showHeroBoost(isCorrect);
-      }, 300);
+      setTimeout(function() { showHeroBoost(isCorrect); }, 300);
     }
 
     function timeOutAnswer() {
@@ -838,15 +770,11 @@
       answeredCount++;
 
       playSFX('wrong');
-
       var qData = selectedQuestions[currentQIndex];
       var allBtns = document.querySelectorAll(".opt-btn");
-      
       allBtns.forEach(function(btn) {
         btn.disabled = true;
-        if (btn.innerText === qData.correctText) {
-          btn.classList.add("correct");
-        }
+        if (btn.innerText === qData.correctText) btn.classList.add("correct");
       });
 
       var tile = document.getElementById("tile-" + currentQIndex);
@@ -854,17 +782,13 @@
       tile.disabled = true;
 
       updateOverallProgress();
-
-      setTimeout(function() {
-        showHeroBoost(false);
-      }, 300);
+      setTimeout(function() { showHeroBoost(false); }, 300);
     }
 
     function updateOverallProgress() {
       var calculatedScore = correctAnswersCount * 2;
-      document.getElementById("q-counter").innerText = `Terjawab: ${answeredCount} / ${selectedQuestions.length} Soal`;
+      document.getElementById("q-counter").innerText = `Terjawab: ${answeredCount} / 50 Soal`;
       document.getElementById("score-badge").innerText = "SKOR: " + calculatedScore;
-
       document.getElementById("finish-btn").style.display = "inline-block";
     }
 
@@ -875,7 +799,7 @@
         nama: studentName,
         kelas: studentClass,
         benar: correctAnswersCount,
-        totalSoal: selectedQuestions.length,
+        totalSoal: 50,
         skor: finalScore,
         pelanggaran: cheatCount
       };
@@ -886,16 +810,13 @@
           mode: "no-cors",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
-        }).catch(function(err) {
-          console.error("Gagal mengirim data:", err);
-        });
+        }).catch(function(err) { console.error("Gagal mengirim data:", err); });
       }
     }
 
     function finishQuiz() {
       clearInterval(timerInterval);
       var finalScore = correctAnswersCount * 2;
-      
       sendDataToGoogleSheets();
 
       if (finalScore >= 70) {
@@ -912,7 +833,7 @@
             <p style="font-size:15px; margin-bottom:8px; color:#00f0ff;">Nama: <strong>${studentName}</strong></p>
             <p style="font-size:15px; margin-bottom:15px; color:#00f0ff;">Kelas: <strong>${studentClass}</strong></p>
             <hr style="border:0; border-top:1px solid #7928ca; margin-bottom:15px;">
-            <p style="font-size:16px; margin-bottom:10px;">Soal Terjawab: <strong>${answeredCount} / ${selectedQuestions.length} Soal</strong></p>
+            <p style="font-size:16px; margin-bottom:10px;">Soal Terjawab: <strong>${answeredCount} / 50 Soal</strong></p>
             <p style="font-size:16px; margin-bottom:10px;">Jawaban Benar: <strong style="color:#10b981;">${correctAnswersCount} Soal</strong></p>
             <p style="font-size:16px; margin-bottom:10px;">Pelanggaran Curang: <strong style="color:${cheatCount > 0 ? '#ef4444' : '#10b981'};">${cheatCount} Kali</strong></p>
             <p style="font-size:26px; font-weight:900; color:#ffe600; margin-top:10px; text-shadow:0 0 10px #ffe600;">NILAI AKHIR: ${finalScore}</p>
